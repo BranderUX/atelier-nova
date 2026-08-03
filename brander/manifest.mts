@@ -155,6 +155,10 @@ export const ELEMENTS: ElementSeed[] = [
       properties: {
         headline: { type: "string", description: "Section headline, e.g. 'Worn by you'" },
         subtitle: { type: "string", description: "One line under the headline" },
+        provenance: {
+          type: "string",
+          description: "Small chip explaining where the renders come from — always 'From your Fit Profile'",
+        },
         looks: {
           type: "array",
           description: "1–3 looks, each backed by a REAL pre-rendered try-on image",
@@ -183,6 +187,7 @@ export const ELEMENTS: ElementSeed[] = [
     defaultProps: {
       headline: "Worn by you",
       subtitle: "Looks styled on you, from pieces you own and this week's picks.",
+      provenance: "From your Fit Profile",
       looks: [
         {
           id: "look-weekend-layers",
@@ -224,6 +229,10 @@ export const ELEMENTS: ElementSeed[] = [
       type: "object",
       properties: {
         title: { type: "string", description: "e.g. 'See it on you'" },
+        provenance: {
+          type: "string",
+          description: "Small chip explaining where the renders come from — always 'From your Fit Profile'",
+        },
         figureMap: {
           type: "object",
           description:
@@ -266,6 +275,7 @@ export const ELEMENTS: ElementSeed[] = [
     },
     defaultProps: {
       title: "See it on you",
+      provenance: "From your Fit Profile",
       figureMap: {
         "pants-cami--none": "__SITE__/products/fitting/fit-pants-cami--none.jpg",
         "pants-cami--terracotta-jacket": "__SITE__/products/fitting/fit-pants-cami--terracotta-jacket.jpg",
