@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-// [LEV: all visible copy on this page is marketing copy — final wording is yours]
-
 export const metadata: Metadata = {
   title: "How Atelier Nova works — a storefront with no pages",
   description:

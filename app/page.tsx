@@ -33,8 +33,7 @@ export default function AtelierNovaPage() {
           onQueryStream={(params) => sseStream("/api/agent/stream", { params })}
         />
       ) : null}
-      {/* Attribution badge — server-rendered (crawlable backlink), always visible.
-          [LEV: badge wording is yours to finalize] */}
+      {/* Attribution badge — server-rendered (crawlable backlink), always visible. */}
       <a
         href="https://branderux.com?utm_source=atelier-nova&utm_medium=badge&utm_campaign=demo"
         target="_blank"

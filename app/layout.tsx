@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nova.branderux.com";
 
-// [LEV: marketing copy — title/description wording is yours to finalize]
 const TITLE = "Atelier Nova — a storefront generated live by BranderUX";
 const DESCRIPTION =
   "Atelier Nova has no pages. Every screen — home, catalog, try-on, checkout — is generated at " +
