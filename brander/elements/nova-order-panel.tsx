@@ -41,6 +41,16 @@ export interface Props {
 
 const serif = "Georgia, 'Times New Roman', serif";
 
+/** Popovers must not move focus — cross-iframe focus scroll jumps the host page. */
+const NO_FOCUS_MENU = {
+  autoFocus: false,
+  disableAutoFocusItem: true,
+  disableAutoFocus: true,
+  disableEnforceFocus: true,
+  disableRestoreFocus: true,
+  disableScrollLock: true,
+} as const;
+
 export default function Component({
   product,
   sizes,
@@ -65,153 +75,152 @@ export default function Component({
     <Box
       sx={{
         width: "100%",
-        maxWidth: 440,
+        maxWidth: 680,
         mx: "auto",
         bgcolor: "#FFFFFF",
         borderRadius: "8px",
-        boxShadow: "0 16px 44px rgba(62,47,40,0.16)",
-        p: { xs: 2.5, md: 3.5 },
+        boxShadow: "0 12px 36px rgba(62,47,40,0.14)",
+        p: { xs: 2, sm: 2.5 },
       }}
     >
-      <Box
-        sx={{
-          width: "100%",
-          aspectRatio: "4 / 4.6",
-          borderRadius: "5px",
-          backgroundImage: `url(${product.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-        }}
-      />
-      <Typography sx={{ mt: 2.5, fontFamily: serif, fontSize: 26, color: "#2E241D" }}>
-        {product.name}
-      </Typography>
-      <Typography sx={{ mt: 0.5, fontSize: 17, color: "#4E4136" }}>${product.price}</Typography>
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2.5 }}>
+        <Box
+          sx={{
+            flexShrink: 0,
+            width: { xs: "100%", sm: 230 },
+            height: { xs: 280, sm: 336 },
+            borderRadius: "5px",
+            backgroundImage: `url(${product.imageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+          }}
+        />
+        <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+          <Typography sx={{ fontFamily: serif, fontSize: 23, color: "#2E241D", lineHeight: 1.15 }}>
+            {product.name}
+          </Typography>
+          <Typography sx={{ mt: 0.25, fontSize: 16, color: "#4E4136" }}>${product.price}</Typography>
 
-      <Typography sx={{ mt: 2.5, fontSize: 14, color: "#6E5F52" }}>Size</Typography>
-      <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
-        {sizes.map((option) => (
-          <Box
-            key={option}
-            onClick={() => setSize(option)}
+          <Typography sx={{ mt: 1.5, fontSize: 12.5, color: "#6E5F52" }}>Size</Typography>
+          <Box sx={{ mt: 0.75, display: "flex", gap: 0.75, flexWrap: "wrap" }}>
+            {sizes.map((option) => {
+              const selected = option === size;
+              return (
+                <Box
+                  key={option}
+                  onClick={() => setSize(option)}
+                  sx={{
+                    minWidth: 40,
+                    px: 1,
+                    py: 0.6,
+                    textAlign: "center",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: 13.5,
+                    bgcolor: selected ? "#C06B4A" : "#F4EDE3",
+                    color: selected ? "#FDF8F0" : "#3B2E25",
+                    transition: "background-color 120ms ease",
+                  }}
+                >
+                  {option}
+                </Box>
+              );
+            })}
+          </Box>
+
+          <Select
+            value={address}
+            onChange={(e) => setAddress(String(e.target.value))}
+            fullWidth
+            size="small"
+            MenuProps={NO_FOCUS_MENU}
             sx={{
-              minWidth: 46,
-              px: 1.25,
-              py: 1,
-              textAlign: "center",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: 14.5,
-              bgcolor: option === size ? "#C06B4A" : "#F4EDE3",
-              color: option === size ? "#FDF8F0" : "#3B2E25",
-              transition: "background-color 120ms ease",
+              mt: 1.75,
+              borderRadius: "20px",
+              bgcolor: "#FDF8F0",
+              fontSize: 13.5,
+              color: "#3B2E25",
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#E4D6C2" },
             }}
           >
-            {option}
-          </Box>
-        ))}
-      </Box>
-
-      <Select
-        value={address}
-        onChange={(e) => setAddress(String(e.target.value))}
-        fullWidth
-        MenuProps={{
-          // The element renders in a content-sized sandbox iframe: any focus
-          // move inside the popover makes the BROWSER scroll the host page to
-          // bring the focused node into view (cross-frame focus scroll) — the
-          // whole screen "slides up". Disable the Modal focus dance entirely.
-          autoFocus: false,
-          disableAutoFocusItem: true,
-          disableAutoFocus: true,
-          disableEnforceFocus: true,
-          disableRestoreFocus: true,
-          disableScrollLock: true,
-        }}
-        sx={{
-          mt: 2.5,
-          borderRadius: "24px",
-          bgcolor: "#FDF8F0",
-          fontSize: 14.5,
-          color: "#3B2E25",
-          "& .MuiOutlinedInput-notchedOutline": { borderColor: "#E4D6C2" },
-        }}
-      >
-        {addresses.map((option) => (
-          <MenuItem key={option} value={option} sx={{ fontSize: 14.5 }}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <Typography sx={{ mt: 2, fontSize: 15, color: "#3B2E25" }}>{arrivalText}</Typography>
-
-      {look ? (
-        <Box
-          onClick={(e) => {
-            e.stopPropagation();
-            setLookOpen(true);
-          }}
-          sx={{
-            mt: 2.5,
-            display: "flex",
-            alignItems: "center",
-            gap: 1.5,
-            p: 1.25,
-            borderRadius: "6px",
-            bgcolor: "#FBF4E9",
-            cursor: "pointer",
-            "&:hover": { bgcolor: "#F3E7D2" },
-          }}
-        >
-          <Box sx={{ display: "flex" }}>
-            {look.items.slice(0, 3).map((item, index) => (
-              <Box
-                key={item.id}
-                sx={{
-                  width: 40,
-                  height: 48,
-                  borderRadius: "4px",
-                  border: "2px solid #FBF4E9",
-                  ml: index === 0 ? 0 : -1.5,
-                  backgroundImage: `url(${item.imageUrl})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center top",
-                }}
-              />
+            {addresses.map((option) => (
+              <MenuItem key={option} value={option} sx={{ fontSize: 13.5 }}>
+                {option}
+              </MenuItem>
             ))}
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 14, color: "#3B2E25" }}>
-              {look.title || "Complete the look"}
-            </Typography>
-            <Typography sx={{ fontSize: 12.5, color: "#8A7B6E" }}>
-              {look.items.length} matching pieces — tap to see
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: 18, color: "#B4653F" }}>›</Typography>
-        </Box>
-      ) : null}
+          </Select>
 
-      <Button
-        fullWidth
-        onClick={() =>
-          onPlaceOrder?.({ id: product.id, name: product.name, price: product.price, size, address, arrival: arrivalText })
-        }
-        sx={{
-          mt: 2.5,
-          py: 1.4,
-          bgcolor: "#C06B4A",
-          color: "#FDF8F0",
-          borderRadius: "6px",
-          fontSize: 15.5,
-          textTransform: "none",
-          boxShadow: "none",
-          "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
-        }}
-      >
-        Place order
-      </Button>
+          <Typography sx={{ mt: 1.25, fontSize: 13.5, color: "#3B2E25" }}>{arrivalText}</Typography>
+
+          {look ? (
+            <Box
+              onClick={(e) => {
+                e.stopPropagation();
+                setLookOpen(true);
+              }}
+              sx={{
+                mt: 1.25,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.25,
+                p: 1,
+                borderRadius: "6px",
+                bgcolor: "#FBF4E9",
+                cursor: "pointer",
+                "&:hover": { bgcolor: "#F3E7D2" },
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                {look.items.slice(0, 3).map((item, index) => (
+                  <Box
+                    key={item.id}
+                    sx={{
+                      width: 30,
+                      height: 38,
+                      borderRadius: "3px",
+                      border: "2px solid #FBF4E9",
+                      ml: index === 0 ? 0 : -1.25,
+                      backgroundImage: `url(${item.imageUrl})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center top",
+                    }}
+                  />
+                ))}
+              </Box>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography noWrap sx={{ fontSize: 13, color: "#3B2E25" }}>
+                  {look.title || "Complete the look"}
+                </Typography>
+                <Typography noWrap sx={{ fontSize: 11.5, color: "#8A7B6E" }}>
+                  {look.items.length} matching pieces — tap to see
+                </Typography>
+              </Box>
+              <Typography sx={{ fontSize: 16, color: "#B4653F" }}>›</Typography>
+            </Box>
+          ) : null}
+
+          <Button
+            fullWidth
+            onClick={() =>
+              onPlaceOrder?.({ id: product.id, name: product.name, price: product.price, size, address, arrival: arrivalText })
+            }
+            sx={{
+              mt: "auto",
+              pt: 1.1,
+              pb: 1.1,
+              bgcolor: "#C06B4A",
+              color: "#FDF8F0",
+              borderRadius: "6px",
+              fontSize: 14.5,
+              textTransform: "none",
+              boxShadow: "none",
+              "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
+            }}
+          >
+            Place order
+          </Button>
+        </Box>
+      </Box>
 
       {look ? (
         <Dialog
