@@ -143,6 +143,76 @@ export const ELEMENTS: ElementSeed[] = [
     interactionPropName: "onSelectItem",
   },
   {
+    file: "nova-look-editorial.tsx",
+    name: "Nova Look Editorial",
+    key: "nova-look-editorial",
+    description:
+      "Editorial 'worn by you' strip: up to three large pre-rendered try-on photos of the shopper wearing composed outfits, each with a look title, a caption naming the pieces and a price chip for what's missing.",
+    category: "media",
+    iconName: "Camera",
+    propsSchema: {
+      type: "object",
+      properties: {
+        headline: { type: "string", description: "Section headline, e.g. 'Worn by you'" },
+        subtitle: { type: "string", description: "One line under the headline" },
+        looks: {
+          type: "array",
+          description: "1–3 looks, each backed by a REAL pre-rendered try-on image",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              title: { type: "string", description: "Short look name, e.g. 'Golden hour'" },
+              caption: {
+                type: "string",
+                description: "One line naming the pieces, e.g. 'The Silk Slip Dress under your Knit Cardigan'",
+              },
+              imageUrl: {
+                type: "string",
+                description:
+                  "Absolute URL of a pre-rendered try-on shot from the fitting-room assets — NEVER a plain product image or an invented URL",
+              },
+              priceLabel: { type: "string", description: "Price chip for the missing pieces, e.g. 'Add the jacket — $164'" },
+            },
+            required: ["id", "title", "caption", "imageUrl"],
+          },
+        },
+      },
+      required: ["looks"],
+    },
+    defaultProps: {
+      headline: "Worn by you",
+      subtitle: "Looks styled on you, from pieces you own and this week's picks.",
+      looks: [
+        {
+          id: "look-weekend-layers",
+          title: "Weekend layers",
+          caption: "Your linen pants + camisole, with the Terracotta Jacket",
+          imageUrl: "__SITE__/products/fitting/fit-pants-cami--terracotta-jacket.jpg",
+          priceLabel: "Add the jacket — $164",
+        },
+        {
+          id: "look-golden-hour",
+          title: "Golden hour",
+          caption: "The Silk Slip Dress under your Knit Cardigan",
+          imageUrl: "__SITE__/products/fitting/fit-slip-dress--knit-cardigan.jpg",
+          priceLabel: "Add the dress — $142",
+        },
+        {
+          id: "look-desk-dinner",
+          title: "Desk to dinner",
+          caption: "The Linen Wrap Dress with the Terracotta Jacket",
+          imageUrl: "__SITE__/products/fitting/fit-wrap-dress--terracotta-jacket.jpg",
+          priceLabel: "Both pieces — $292",
+        },
+      ],
+    },
+    structurePrompt:
+      "Editorial try-on strip for home and lookbook moments. Use ONLY combinations that exist in the fitting-room asset map in context — imageUrl must be one of those pre-rendered try-on URLs. Caption names the pieces (mark owned ones as 'your …'); priceLabel prices only what's missing.",
+    clickQueryTemplate: "Shop the '{title}' look: {caption}",
+    interactionPropName: "onSelectLook",
+  },
+  {
     file: "nova-fitting-room.tsx",
     name: "Nova Fitting Room",
     key: "nova-fitting-room",

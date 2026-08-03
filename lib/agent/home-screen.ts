@@ -35,7 +35,7 @@ export function buildHomeResponseText(siteOrigin: string): string {
   );
 
   const components = [
-    { id: "root", component: "Column", children: ["home-row", "home-suggestions"], spacing: 3 },
+    { id: "root", component: "Column", children: ["home-row", "home-looks", "home-suggestions"], spacing: 3 },
     { id: "home-row", component: "Row", children: ["home-hero", "home-picks"], spacing: 2 },
     {
       id: "home-hero",
@@ -49,6 +49,11 @@ export function buildHomeResponseText(siteOrigin: string): string {
       weight: 1,
       columns: 3,
       ...bind("home-picks", ["products"]),
+    },
+    {
+      id: "home-looks",
+      component: "custom:nova-look-editorial",
+      ...bind("home-looks", ["headline", "subtitle", "looks"]),
     },
     {
       id: "home-suggestions",
@@ -94,6 +99,39 @@ export function buildHomeResponseText(siteOrigin: string): string {
                 }
               : {}),
           })),
+        },
+      },
+    },
+    {
+      updateDataModel: {
+        surfaceId: "main",
+        path: "/home-looks",
+        value: {
+          headline: "Worn by you",
+          subtitle: "Looks styled on you, from pieces you own and this week's picks.",
+          looks: [
+            {
+              id: "look-weekend-layers",
+              title: "Weekend layers",
+              caption: "Your linen pants + camisole, with the Terracotta Jacket",
+              imageUrl: `${siteOrigin}/products/fitting/fit-pants-cami--terracotta-jacket.jpg`,
+              priceLabel: "Add the jacket — $164",
+            },
+            {
+              id: "look-golden-hour",
+              title: "Golden hour",
+              caption: "The Silk Slip Dress under your Knit Cardigan",
+              imageUrl: `${siteOrigin}/products/fitting/fit-slip-dress--knit-cardigan.jpg`,
+              priceLabel: "Add the dress — $142",
+            },
+            {
+              id: "look-desk-dinner",
+              title: "Desk to dinner",
+              caption: "The Linen Wrap Dress with the Terracotta Jacket",
+              imageUrl: `${siteOrigin}/products/fitting/fit-wrap-dress--terracotta-jacket.jpg`,
+              priceLabel: "Both pieces — $292",
+            },
+          ],
         },
       },
     },
