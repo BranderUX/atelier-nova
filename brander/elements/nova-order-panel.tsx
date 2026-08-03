@@ -116,6 +116,18 @@ export default function Component({
         value={address}
         onChange={(e) => setAddress(String(e.target.value))}
         fullWidth
+        MenuProps={{
+          // The element renders in a content-sized sandbox iframe: any focus
+          // move inside the popover makes the BROWSER scroll the host page to
+          // bring the focused node into view (cross-frame focus scroll) — the
+          // whole screen "slides up". Disable the Modal focus dance entirely.
+          autoFocus: false,
+          disableAutoFocusItem: true,
+          disableAutoFocus: true,
+          disableEnforceFocus: true,
+          disableRestoreFocus: true,
+          disableScrollLock: true,
+        }}
         sx={{
           mt: 2.5,
           borderRadius: "24px",
@@ -207,6 +219,10 @@ export default function Component({
           onClose={() => setLookOpen(false)}
           fullWidth
           maxWidth="sm"
+          disableAutoFocus
+          disableEnforceFocus
+          disableRestoreFocus
+          disableScrollLock
           PaperProps={{ sx: { bgcolor: "#FBF4E9", borderRadius: "10px", p: { xs: 2, md: 3 } } }}
         >
           <Typography sx={{ fontFamily: serif, fontSize: 28, color: "#2E241D", textAlign: "center" }}>
