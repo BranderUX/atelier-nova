@@ -27,8 +27,8 @@ The agent is a plain Anthropic streaming call. Its system prompt
   week" never goes stale.
 - **The catalog** — 22 products with prices, fabrics, care instructions, fit
   notes and image URLs.
-- **Pre-rendered try-on assets** — the fitting room swaps her full-body image
-  from a 9-combination map, instantly, with no AI call.
+- **Pre-rendered outfit assets** — the fitting room swaps the styled figure
+  from a 9-combination image map, instantly, with no AI call.
 
 BranderUX contributes the other half via `params.system`: the A2UI protocol and
 the element catalog (nine custom "Nova" elements — hero, product grid, stylist
@@ -88,7 +88,7 @@ fallbacks. The canned home never counts against either.
 4. Click a product → order panel, size M preselected, complete-the-look modal →
    "Order placed."
 5. "I'm flying to Lisbon for four days" → a packing capsule around what she
-   owns. Then: "show me how it looks on me" → the fitting room.
+   owns. Then: "let me play with combinations" → the fitting room.
 
 ---
 

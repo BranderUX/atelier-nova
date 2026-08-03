@@ -231,10 +231,10 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
   screen(
     "custom-nova-fitting-room",
     "Nova Fitting Room",
-    "Interactive try-on: drag pieces onto her figure, the image swaps instantly.",
+    "Interactive styling room: drag pieces onto the figure, the image swaps instantly.",
     {
-      whenToUse: "The shopper wants to see pieces on herself: try on, visualize, 'how would it look on me'.",
-      exampleQueries: ["Show me how these look on me", "Can I try the jacket on?"],
+      whenToUse: "The shopper wants to try pieces together or play with combinations (including 'try it on' style requests).",
+      exampleQueries: ["Let me play with combinations of these pieces", "How does the jacket work with the dress?"],
       clickedElements: ["Order this look → order panel / confirmation"],
     },
     [

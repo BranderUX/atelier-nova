@@ -107,8 +107,8 @@ export function buildHomeResponseText(siteOrigin: string): string {
         surfaceId: "main",
         path: "/home-looks",
         value: {
-          headline: "Worn by you",
-          subtitle: "Looks styled on you, from pieces you own and this week's picks.",
+          headline: "Styled together",
+          subtitle: "This week's picks, combined with pieces you already own.",
           looks: [
             {
               id: "look-weekend-layers",
@@ -143,7 +143,7 @@ export function buildHomeResponseText(siteOrigin: string): string {
           suggestions: [
             { label: "What's new this week?", query: "Show me what's new in" },
             { label: "Three ways to wear the jacket", query: "Show me three ways to wear the Terracotta Jacket" },
-            { label: "See it on me", query: "Show me how these pieces would look on me" },
+            { label: "Play with combinations", query: "Let me play with combinations of these pieces" },
             { label: "What's on sale?", query: "Show me what's on sale" },
           ],
         },

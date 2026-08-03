@@ -147,13 +147,13 @@ export const ELEMENTS: ElementSeed[] = [
     name: "Nova Look Editorial",
     key: "nova-look-editorial",
     description:
-      "Editorial 'worn by you' strip: up to three large pre-rendered try-on photos of the shopper wearing composed outfits, each with a look title, a caption naming the pieces and a price chip for what's missing.",
+      "Editorial looks strip: up to three large pre-rendered photos of composed outfits styled together, each with a look title, a caption naming the pieces and a price chip for what's missing.",
     category: "media",
     iconName: "Camera",
     propsSchema: {
       type: "object",
       properties: {
-        headline: { type: "string", description: "Section headline, e.g. 'Worn by you'" },
+        headline: { type: "string", description: "Section headline, e.g. 'Styled together'" },
         subtitle: { type: "string", description: "One line under the headline" },
         looks: {
           type: "array",
@@ -181,8 +181,8 @@ export const ELEMENTS: ElementSeed[] = [
       required: ["looks"],
     },
     defaultProps: {
-      headline: "Worn by you",
-      subtitle: "Looks styled on you, from pieces you own and this week's picks.",
+      headline: "Styled together",
+      subtitle: "This week's picks, combined with pieces you already own.",
       looks: [
         {
           id: "look-weekend-layers",
@@ -217,13 +217,13 @@ export const ELEMENTS: ElementSeed[] = [
     name: "Nova Fitting Room",
     key: "nova-fitting-room",
     description:
-      "Interactive try-on: her full-body figure on the left, clothing cards on the right — drag a piece onto her (or tap it) and the figure swaps instantly from a pre-rendered image map. No queries during play; one CTA orders the styled look.",
+      "Interactive styling room: a full-body outfit figure on the left, clothing cards on the right — drag a piece onto the figure (or tap it) and it swaps instantly from a pre-rendered image map. No queries during play; one CTA orders the styled look.",
     category: "interactive",
     iconName: "Shirt",
     propsSchema: {
       type: "object",
       properties: {
-        title: { type: "string", description: "e.g. 'See it on you'" },
+        title: { type: "string", description: "e.g. 'Mix & match'" },
         figureMap: {
           type: "object",
           description:
@@ -265,7 +265,7 @@ export const ELEMENTS: ElementSeed[] = [
       required: ["figureMap", "bases", "layers", "initialBaseId"],
     },
     defaultProps: {
-      title: "See it on you",
+      title: "Mix & match",
       figureMap: {
         "pants-cami--none": "__SITE__/products/fitting/fit-pants-cami--none.jpg",
         "pants-cami--terracotta-jacket": "__SITE__/products/fitting/fit-pants-cami--terracotta-jacket.jpg",
@@ -289,7 +289,7 @@ export const ELEMENTS: ElementSeed[] = [
       initialBaseId: "pants-cami",
     },
     structurePrompt:
-      "Use when the shopper wants to SEE pieces on herself (try on, 'how would it look on me'). Pass EXACTLY the figureMap, bases and layers from the fitting-room assets in context — the images are pre-rendered for those combinations only.",
+      "Use when the shopper wants to play with combinations or try pieces together. Pass EXACTLY the figureMap, bases and layers from the styling-room assets in context — the images are pre-rendered for those combinations only. Titles stay combination-flavored ('Mix & match'), never 'on you'.",
     clickQueryTemplate: "Order the look I styled on myself: {lookNames} (total ${total})",
     interactionPropName: "onOrderLook",
   },

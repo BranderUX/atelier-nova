@@ -130,7 +130,7 @@ export default function AboutPage() {
         {
           src: "/about/fitting-room.jpg",
           caption:
-            "The fitting room: an interactive custom element — drag a piece onto her and the figure changes instantly, no AI call.",
+            "The fitting room: an interactive custom element — drag a piece onto the figure and it changes instantly, no AI call.",
         },
         {
           src: "/about/trip-capsule.jpg",

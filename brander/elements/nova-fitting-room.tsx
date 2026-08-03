@@ -133,7 +133,7 @@ export default function Component({
           <Box
             component="img"
             src={figure}
-            alt="Try-on preview"
+            alt="Styled outfit preview"
             sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />
           <Box sx={{ position: "absolute", left: 10, bottom: 10, bgcolor: "rgba(46,42,38,0.75)", color: "#F7F1E8", borderRadius: "4px", px: 1.25, py: 0.5, fontSize: 12 }}>
@@ -143,7 +143,7 @@ export default function Component({
 
         <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 1 }}>
           <Typography sx={{ fontSize: 12.5, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8A7B6E" }}>
-            Layers — drag onto her or tap
+            Layers — drag onto the figure or tap
           </Typography>
           {layers.map((piece) => cardRow(piece, "layer", piece.id === layerId))}
           <Typography sx={{ mt: 1, fontSize: 12.5, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8A7B6E" }}>
