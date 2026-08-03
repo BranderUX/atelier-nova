@@ -1,0 +1,31 @@
+# Atelier Nova
+
+> Atelier Nova is a demo fashion storefront with no pages: every screen — the
+> personalized home, the catalog, the interactive fitting room, the order flow —
+> is generated at runtime by BranderUX from an AI agent's answers. The entire
+> frontend is one component; the repo is an open-source reference for building
+> full agentic applications.
+
+Atelier Nova demonstrates "generative UI" / "agentic commerce": instead of a
+chatbot answering in text, the agent's answers become branded, interactive
+screens. Clicks flow back to the agent as new queries, so the interface and the
+conversation are the same loop. The screens are composed from pre-built,
+brand-styled elements (not code generation at runtime), which guarantees brand
+fidelity and safety while the AI decides composition and data.
+
+Built with [BranderUX](https://branderux.com) — AI-UX infrastructure that turns
+any AI agent into a full branded application, website or MCP app.
+
+## Pages
+
+- [Home](/) — the live demo (client-rendered BranderUX surface)
+- [How it works](/about) — architecture, screenshots, FAQ
+
+## Source
+
+- [GitHub repository](https://github.com/BranderUX/atelier-nova) — the complete
+  storefront: a Next.js shell, one agent API route, the custom element sources,
+  and the seed script that provisions the BranderUX project.
+- [BranderUX](https://branderux.com) — the platform generating the screens.
+- [@brander/sdk](https://www.npmjs.com/package/@brander/sdk) — the NPM package
+  embedding the surface.
