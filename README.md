@@ -31,8 +31,8 @@ The agent is a plain Anthropic streaming call. Its system prompt
   from a 9-combination map, instantly, with no AI call.
 
 BranderUX contributes the other half via `params.system`: the A2UI protocol and
-the element catalog (ten custom "Nova" elements — hero, product grid, stylist
-note, order panel, order confirmation, complete-the-look, look board, fitting
+the element catalog (nine custom "Nova" elements — hero, product grid, stylist
+note, order panel, order confirmation, look board, editorial looks, fitting
 room, suggestions — seeded by `scripts/seed-brander-project.mts`).
 
 Two patterns worth stealing:
@@ -59,7 +59,7 @@ BRANDER_REFRESH_TOKEN=… BRANDER_API_BASE=… npm run seed
 ```
 
 The seed is idempotent: it provisions the project (brand, settings, custom
-pages), publishes the ten elements from `brander/elements/`, and pins the
+pages), publishes the nine elements from `brander/elements/`, and pins the
 screens — re-runs only touch what changed.
 
 > Local note: the published `@brander/sdk` targets the BranderUX production

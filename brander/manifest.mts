@@ -1,5 +1,5 @@
 /**
- * Metadata for the six Nova custom elements — everything the BranderUX
+ * Metadata for the Nova custom elements — everything the BranderUX
  * custom-element API needs beyond the TSX in brander/elements/. `__SITE__`
  * tokens in defaultProps are replaced with the storefront origin at seed time.
  *
@@ -554,47 +554,5 @@ export const ELEMENTS: ElementSeed[] = [
       "Use immediately after an order is placed: confirm with the arrival date and the new order id.",
     clickQueryTemplate: "Track my order {orderId}",
     interactionPropName: "onTrackOrder",
-  },
-  {
-    file: "nova-complete-look.tsx",
-    name: "Nova Complete Look",
-    key: "nova-complete-look",
-    description:
-      "Complete-the-look bundle panel: outfit item thumbnails, an optional reasoning chip, bundle total and a shop-bundle CTA.",
-    category: "interactive",
-    iconName: "Layers",
-    propsSchema: {
-      type: "object",
-      properties: {
-        title: { type: "string", description: "e.g. 'Complete the look'" },
-        items: {
-          type: "array",
-          items: LOOK_ITEM_SCHEMA,
-          description: "Bundle items — garments first (max 3 shown large), then accessories",
-        },
-        bundleNote: { type: "string", description: "Reasoning chip, e.g. 'Styled together — soft pastels'" },
-        ctaLabel: { type: "string", description: "e.g. 'Shop bundle'" },
-      },
-      required: ["title", "items", "ctaLabel"],
-    },
-    defaultProps: {
-      title: "Complete the look",
-      items: [
-        { id: "lilac-silk-midi", name: "Lilac Silk Midi", price: 240, imageUrl: "__SITE__/products/lilac-silk-midi.jpg" },
-        { id: "pale-blue-gown", name: "Pale Blue Gown", price: 280, imageUrl: "__SITE__/products/pale-blue-gown.jpg" },
-        { id: "sage-chiffon-gown", name: "Sage Chiffon Gown", price: 260, imageUrl: "__SITE__/products/sage-chiffon-gown.jpg" },
-        { id: "strappy-heels", name: "Strappy Heels", price: 90, imageUrl: "__SITE__/products/strappy-heels.jpg" },
-        { id: "pearl-earrings", name: "Pearl Earrings", price: 50, imageUrl: "__SITE__/products/pearl-earrings.jpg" },
-      ],
-      bundleNote: "Styled together — soft pastels",
-      ctaLabel: "Shop bundle",
-    },
-    structurePrompt:
-      "Use on occasion/edit screens to offer the full outfit as one bundle. Garments first in items[], then accessories; bundleNote explains WHY this bundle fits the shopper.",
-    clickQueryTemplate: JSON.stringify({
-      $primary: "Show details and order options for {name} (ID: {id})",
-      onShopBundle: "Order the complete look bundle in my size",
-    }),
-    interactionPropName: "onSelectItem",
   },
 ];

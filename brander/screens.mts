@@ -181,11 +181,11 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
   screen(
     "custom-nova-occasion",
     "Nova Occasion Edit",
-    "Occasion shopping edit: title, matching pieces, complete-the-look bundle.",
+    "Occasion shopping edit: title, matching pieces, a composed outfit for the event.",
     {
-      whenToUse: "Dressing for an event or occasion (a party, dinner, trip) — a curated edit plus the full-outfit bundle.",
+      whenToUse: "Dressing for an event or occasion (a party, dinner date) — a curated edit plus one composed outfit.",
       exampleQueries: ["What should I wear to a summer garden party?", "Dress me for a dinner event"],
-      clickedElements: ["product card → order panel", "Shop bundle → bundle order"],
+      clickedElements: ["product card → order panel", "Add the missing pieces → outfit order"],
     },
     [
       headerEl("occasion-title", 0, "Occasion name, e.g. 'For the Garden Party'"),
@@ -198,12 +198,12 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
         "Matching dresses and accessories"
       ),
       novaEl(
-        "occasion-bundle",
-        "nova-complete-look",
+        "occasion-outfit",
+        "nova-look-board",
         1,
         1,
         pctSize("50.00", { minWidth: "300px" }),
-        "Complete-the-look bundle with reasoning note"
+        "ONE composed outfit for the occasion; owned pieces marked; gap pieces priced"
       ),
     ]
   ),
