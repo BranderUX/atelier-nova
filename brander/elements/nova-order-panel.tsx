@@ -232,69 +232,80 @@ export default function Component({
           disableEnforceFocus
           disableRestoreFocus
           disableScrollLock
-          PaperProps={{ sx: { bgcolor: "#FBF4E9", borderRadius: "10px", p: { xs: 2, md: 3 } } }}
+          PaperProps={{
+            sx: {
+              bgcolor: "#FBF4E9",
+              borderRadius: "10px",
+              p: 2,
+              // The dialog can never exceed the element's iframe — the compact
+              // panel makes that envelope short, so the content is a single
+              // horizontal strip and the paper scrolls internally if it must.
+              maxHeight: "calc(100% - 20px)",
+              overflowY: "auto",
+            },
+          }}
         >
-          <Typography sx={{ fontFamily: serif, fontSize: 28, color: "#2E241D", textAlign: "center" }}>
+          <Typography sx={{ fontFamily: serif, fontSize: 20, color: "#2E241D", textAlign: "center" }}>
             {look.title || "Complete the look"}
           </Typography>
           {look.note ? (
-            <Typography sx={{ mt: 0.75, fontSize: 13.5, color: "#8A7B6E", textAlign: "center" }}>
+            <Typography noWrap sx={{ mt: 0.25, fontSize: 12, color: "#8A7B6E", textAlign: "center" }}>
               {look.note}
             </Typography>
           ) : null}
-          <Box sx={{ mt: 2, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1.5 }}>
-            {look.items.map((item) => (
-              <Box key={item.id} sx={{ bgcolor: "#FFFFFF", borderRadius: "6px", overflow: "hidden" }}>
+          <Box sx={{ mt: 1.5, display: "flex", gap: 1 }}>
+            {look.items.slice(0, 4).map((item) => (
+              <Box key={item.id} sx={{ flex: 1, minWidth: 0, bgcolor: "#FFFFFF", borderRadius: "6px", overflow: "hidden" }}>
                 <Box
                   sx={{
                     width: "100%",
-                    aspectRatio: "4 / 4",
+                    height: 104,
                     backgroundImage: `url(${item.imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center top",
                   }}
                 />
-                <Box sx={{ px: 1.25, py: 1, textAlign: "center" }}>
-                  <Typography noWrap sx={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", color: "#3B2E25" }}>
+                <Box sx={{ px: 0.75, py: 0.6, textAlign: "center" }}>
+                  <Typography noWrap sx={{ fontSize: 10, letterSpacing: "0.05em", textTransform: "uppercase", color: "#3B2E25" }}>
                     {item.name}
                   </Typography>
-                  <Typography sx={{ fontSize: 13, color: "#8A7B6E" }}>${item.price}</Typography>
+                  <Typography sx={{ fontSize: 11.5, color: "#8A7B6E" }}>${item.price}</Typography>
                 </Box>
               </Box>
             ))}
           </Box>
-          <Button
-            fullWidth
-            onClick={() => {
-              setLookOpen(false);
-              onAddCompleteLook?.({
-                baseProductId: product.id,
-                bundleNames: look.items.map((item) => item.name).join(", "),
-                itemCount: look.items.length,
-                total: lookTotal,
-              });
-            }}
-            sx={{
-              mt: 2,
-              py: 1.3,
-              bgcolor: "#C06B4A",
-              color: "#FDF8F0",
-              borderRadius: "6px",
-              fontSize: 15,
-              textTransform: "none",
-              boxShadow: "none",
-              "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
-            }}
-          >
-            {`Add the complete look — $${lookTotal}`}
-          </Button>
-          <Button
-            fullWidth
-            onClick={() => setLookOpen(false)}
-            sx={{ mt: 1, py: 1, color: "#5C4F43", fontSize: 13.5, textTransform: "none" }}
-          >
-            Just the {product.name}
-          </Button>
+          <Box sx={{ mt: 1.5, display: "flex", gap: 1, alignItems: "center" }}>
+            <Button
+              onClick={() => setLookOpen(false)}
+              sx={{ flex: 1, py: 0.9, color: "#5C4F43", fontSize: 12.5, textTransform: "none" }}
+            >
+              Just the {product.name}
+            </Button>
+            <Button
+              onClick={() => {
+                setLookOpen(false);
+                onAddCompleteLook?.({
+                  baseProductId: product.id,
+                  bundleNames: look.items.map((item) => item.name).join(", "),
+                  itemCount: look.items.length,
+                  total: lookTotal,
+                });
+              }}
+              sx={{
+                flex: 1.4,
+                py: 1,
+                bgcolor: "#C06B4A",
+                color: "#FDF8F0",
+                borderRadius: "6px",
+                fontSize: 13.5,
+                textTransform: "none",
+                boxShadow: "none",
+                "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
+              }}
+            >
+              {`Add the look — $${lookTotal}`}
+            </Button>
+          </Box>
         </Dialog>
       ) : null}
     </Box>
