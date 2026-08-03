@@ -87,6 +87,9 @@ export function buildHomeResponseText(siteOrigin: string): string {
               ? {
                   badge: "Recommended",
                   badgeReason: "Pairs with the linen pants you bought last week",
+                  // The pre-rendered try-on shot of THIS combination: the jacket
+                  // worn over her linen pants + camisole (fitting-room map).
+                  badgeImageUrl: `${siteOrigin}/products/fitting/fit-pants-cami--terracotta-jacket.jpg`,
                   sizeChip: `Size ${SHOPPER.size}`,
                 }
               : {}),
@@ -116,5 +119,10 @@ export function buildHomeResponseText(siteOrigin: string): string {
     ...dataModels.map((d) => JSON.stringify(d)),
   ].join("\n");
 
-  return `Welcome back, ${SHOPPER.name} — your week, edited.\n${A2UI_START}\n${jsonl}\n${A2UI_END}`;
+  return `${A2UI_START}\n${jsonl}\n${A2UI_END}`;
+}
+
+/** Streamed ~2s AFTER the screen — renders as the closing note under it. */
+export function homeFollowUpText(): string {
+  return `Welcome back, ${SHOPPER.name} — this week's picks, chosen around your wardrobe.`;
 }

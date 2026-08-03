@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nova.branderux.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nova.branderux.app";
 
 const TITLE = "Atelier Nova — a storefront generated live by BranderUX";
 const DESCRIPTION =

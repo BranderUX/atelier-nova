@@ -8,6 +8,7 @@ interface GridProduct {
   imageUrl: string;
   badge?: string;
   badgeReason?: string;
+  badgeImageUrl?: string;
   sizeChip?: string;
 }
 
@@ -27,6 +28,9 @@ export default function Component({ products, columns, onSelectProduct, onItemCo
         display: "grid",
         gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: `repeat(${cols}, 1fr)` },
         gap: 2,
+        // Room for the hover lift + shadow — the sandbox iframe clips at the
+        // component's bounds, so without this the animation crops at the edges.
+        py: 1,
       }}
     >
       {products.map((product) => (
@@ -58,7 +62,33 @@ export default function Component({ products, columns, onSelectProduct, onItemCo
           />
           {product.badge ? (
             <Tooltip
-              title={product.badgeReason || ""}
+              title={
+                product.badgeReason ? (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {product.badgeImageUrl ? (
+                      <Box
+                        component="img"
+                        src={product.badgeImageUrl}
+                        alt=""
+                        sx={{
+                          width: 42,
+                          height: 54,
+                          flexShrink: 0,
+                          borderRadius: "3px",
+                          objectFit: "cover",
+                          // Center crop, NOT top: pairing thumbnails should show
+                          // the GARMENT — a top crop on full-length shots shows
+                          // the model's head instead of the referenced piece.
+                          objectPosition: "center",
+                        }}
+                      />
+                    ) : null}
+                    <Box component="span">{product.badgeReason}</Box>
+                  </Box>
+                ) : (
+                  ""
+                )
+              }
               arrow
               placement="bottom"
               disableHoverListener={!product.badgeReason}

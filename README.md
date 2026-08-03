@@ -1,6 +1,6 @@
 # Atelier Nova — a storefront generated live by BranderUX
 
-**Live demo:** https://nova.branderux.com · **How it works:** https://nova.branderux.com/about
+**Live demo:** https://nova.branderux.app · **How it works:** https://nova.branderux.app/about
 
 Atelier Nova is a complete example of a **full agentic application** built on
 [BranderUX](https://branderux.com): a womenswear storefront where the entire

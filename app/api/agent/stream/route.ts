@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { MessageStreamEvent } from "@anthropic-ai/sdk/resources/messages";
 import { AGUIEventType, anthropicStream, type CustomerAIParams } from "@brander/sdk";
-import { buildHomeResponseText, isHomeQuery } from "@/lib/agent/home-screen";
+import { buildHomeResponseText, homeFollowUpText, isHomeQuery } from "@/lib/agent/home-screen";
 import { checkRateLimit } from "@/lib/agent/rate-limit";
 import { buildWorldPrompt } from "@/lib/agent/system-prompt";
 
@@ -16,23 +16,33 @@ const SSE_HEADERS = {
   Connection: "keep-alive",
 } as const;
 
-/** Stream a pre-built response as AG-UI SSE events — same wire shape as the LLM path. */
-function cannedResponse(text: string): Response {
+/**
+ * Stream a pre-built response as AG-UI SSE events — same wire shape as the LLM
+ * path. An optional followUp arrives after a delay, AFTER the screen — the
+ * client routes post-block text to the closing note under the screen.
+ */
+function cannedResponse(text: string, followUp?: { text: string; delayMs: number }): Response {
   const ts = Date.now();
   const messageId = `msg-${ts}`;
-  const events = [
-    { type: AGUIEventType.RUN_STARTED, runId: `run-${ts}`, threadId: `thread-${ts}`, timestamp: ts },
-    { type: AGUIEventType.TEXT_MESSAGE_START, messageId, role: "assistant", timestamp: ts },
-    { type: AGUIEventType.TEXT_MESSAGE_CONTENT, messageId, delta: text, timestamp: ts },
-    { type: AGUIEventType.TEXT_MESSAGE_END, messageId, timestamp: ts },
-    { type: AGUIEventType.RUN_FINISHED, runId: `run-${ts}`, timestamp: ts },
-  ];
   const encoder = new TextEncoder();
   const readable = new ReadableStream<Uint8Array>({
-    start(controller) {
-      for (const event of events) {
+    async start(controller) {
+      const send = (event: Record<string, unknown>) =>
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+      send({ type: AGUIEventType.RUN_STARTED, runId: `run-${ts}`, threadId: `thread-${ts}`, timestamp: ts });
+      send({ type: AGUIEventType.TEXT_MESSAGE_START, messageId, role: "assistant", timestamp: ts });
+      send({ type: AGUIEventType.TEXT_MESSAGE_CONTENT, messageId, delta: text, timestamp: ts });
+      if (followUp) {
+        await new Promise((resolve) => setTimeout(resolve, followUp.delayMs));
+        send({
+          type: AGUIEventType.TEXT_MESSAGE_CONTENT,
+          messageId,
+          delta: `\n${followUp.text}`,
+          timestamp: Date.now(),
+        });
       }
+      send({ type: AGUIEventType.TEXT_MESSAGE_END, messageId, timestamp: Date.now() });
+      send({ type: AGUIEventType.RUN_FINISHED, runId: `run-${ts}`, timestamp: Date.now() });
       controller.enqueue(encoder.encode("data: [DONE]\n\n"));
       controller.close();
     },
@@ -53,7 +63,10 @@ export async function POST(req: Request): Promise<Response> {
   // screen (no LLM call, never rate-limited): instant first paint, zero tokens.
   const lastUserMessage = [...params.messages].reverse().find((m) => m.role === "user");
   if (lastUserMessage && isHomeQuery(lastUserMessage.content)) {
-    return cannedResponse(buildHomeResponseText(siteOrigin));
+    return cannedResponse(buildHomeResponseText(siteOrigin), {
+      text: homeFollowUpText(),
+      delayMs: 2000,
+    });
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";

@@ -38,6 +38,11 @@ const PRODUCT_ITEM_SCHEMA = {
       description:
         "One-line personal reason shown as a tooltip on the badge, e.g. 'Pairs with the linen pants you bought last week'. Always provide it when badge is set.",
     },
+    badgeImageUrl: {
+      type: "string",
+      description:
+        "When badgeReason references ANOTHER product (a pairing piece), its catalog imageUrl — shown as a thumbnail inside the tooltip.",
+    },
     sizeChip: { type: "string", description: "Small chip under the price, e.g. 'Size M'" },
   },
   required: ["id", "name", "price", "imageUrl"],
