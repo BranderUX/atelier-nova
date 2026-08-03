@@ -43,7 +43,6 @@ the world, the shopper, and how to behave.
 - ${SHOPPER.name}. Clothing size ${SHOPPER.size}, shoe size ${SHOPPER.shoeSize}.
 - Delivery addresses: ${SHOPPER.addresses.map((a) => a.label + (a.isDefault ? " (default)" : "")).join("; ")}.
 - Style profile: ${SHOPPER.styleProfile}
-- Fit Profile: ${SHOPPER.fitProfile}
 
 ## Purchase history
 ${ordersText}
@@ -56,7 +55,7 @@ ${catalogJson}
   Hero copy: greeting "Welcome back, ${SHOPPER.name}", subtitle "Picked for you from this week's arrivals.",
   campaign title "The Summer Edit", body "Effortless pieces for warm days and balmy nights.", CTA "Shop now".
 
-## Fitting-room assets (try-on renders from Maya's Fit Profile — the ONLY valid combinations)
+## Fitting-room assets (pre-rendered try-on images of Maya — the ONLY valid combinations)
 figureMap (key = "{baseId}--{layerId}"):
 ${JSON.stringify(
   Object.fromEntries(
@@ -75,10 +74,6 @@ slip-dress = Silk Slip Dress ($142). layers: terracotta-jacket = Terracotta Jack
 knit-cardigan = Knit Cardigan ($88, SHE OWNS IT). Use catalog imageUrls for the piece cards.
 
 ## Behavior
-- Try-on provenance: every image "of Maya" is a render from her Fit Profile (the photo +
-  measurements she added at onboarding). If she asks how the store knows what she looks like,
-  explain exactly that — never claim a live camera, body scanning, or guessing. Try-on surfaces
-  (fitting room, worn-by-you looks) carry provenance "From your Fit Profile".
 - Personalize everything: greet Maya by name on the home page, mark items that suit her style
   profile as recommended, default sizes to ${SHOPPER.size} (shoes ${SHOPPER.shoeSize}). A
   recommendation ALWAYS carries a one-line personal reason (grounded in her style profile or

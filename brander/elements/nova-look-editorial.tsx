@@ -11,7 +11,6 @@ interface EditorialLook {
 export interface Props {
   headline?: string;
   subtitle?: string;
-  provenance?: string;
   looks: EditorialLook[];
   onSelectLook?: (look: EditorialLook) => void;
   onItemContextMenu?: (event: React.MouseEvent, look: EditorialLook) => void;
@@ -19,7 +18,7 @@ export interface Props {
 
 const serif = "Georgia, 'Times New Roman', serif";
 
-export default function Component({ headline, subtitle, provenance, looks, onSelectLook, onItemContextMenu }: Props) {
+export default function Component({ headline, subtitle, looks, onSelectLook, onItemContextMenu }: Props) {
   return (
     <Box
       sx={{
@@ -32,25 +31,9 @@ export default function Component({ headline, subtitle, provenance, looks, onSel
     >
       {headline ? (
         <Box sx={{ mb: 2 }}>
-          <Box sx={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 1.25 }}>
-            <Typography sx={{ fontFamily: serif, fontSize: 26, color: "#2E241D", lineHeight: 1.15 }}>
-              {headline}
-            </Typography>
-            {provenance ? (
-              <Box
-                sx={{
-                  bgcolor: "#EFE5D3",
-                  color: "#8A7B6E",
-                  borderRadius: "999px",
-                  px: 1.25,
-                  py: 0.3,
-                  fontSize: 11.5,
-                }}
-              >
-                {provenance}
-              </Box>
-            ) : null}
-          </Box>
+          <Typography sx={{ fontFamily: serif, fontSize: 26, color: "#2E241D", lineHeight: 1.15 }}>
+            {headline}
+          </Typography>
           {subtitle ? (
             <Typography sx={{ mt: 0.5, fontSize: 13, color: "#8A7B6E" }}>{subtitle}</Typography>
           ) : null}

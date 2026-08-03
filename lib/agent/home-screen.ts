@@ -53,7 +53,7 @@ export function buildHomeResponseText(siteOrigin: string): string {
     {
       id: "home-looks",
       component: "custom:nova-look-editorial",
-      ...bind("home-looks", ["headline", "subtitle", "provenance", "looks"]),
+      ...bind("home-looks", ["headline", "subtitle", "looks"]),
     },
     {
       id: "home-suggestions",
@@ -109,7 +109,6 @@ export function buildHomeResponseText(siteOrigin: string): string {
         value: {
           headline: "Worn by you",
           subtitle: "Looks styled on you, from pieces you own and this week's picks.",
-          provenance: "From your Fit Profile",
           looks: [
             {
               id: "look-weekend-layers",

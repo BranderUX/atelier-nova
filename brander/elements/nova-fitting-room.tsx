@@ -11,7 +11,6 @@ interface Piece {
 
 export interface Props {
   title?: string;
-  provenance?: string;
   /** Pre-rendered try-on images keyed `${baseId}--${layerId}` (layerId "none" = no layer). */
   figureMap: Record<string, string>;
   bases: Piece[];
@@ -25,7 +24,6 @@ const serif = "Georgia, 'Times New Roman', serif";
 
 export default function Component({
   title,
-  provenance,
   figureMap,
   bases,
   layers,
@@ -101,25 +99,9 @@ export default function Component({
   return (
     <Box sx={{ width: "100%", bgcolor: "#FBF4E9", borderRadius: "8px", boxShadow: "0 12px 36px rgba(62,47,40,0.12)", p: { xs: 2, md: 3 } }}>
       {title ? (
-        <Box sx={{ mb: 2, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 1.25 }}>
-          <Typography sx={{ fontFamily: serif, fontSize: { xs: 22, md: 26 }, color: "#2E241D" }}>
-            {title}
-          </Typography>
-          {provenance ? (
-            <Box
-              sx={{
-                bgcolor: "#EFE5D3",
-                color: "#8A7B6E",
-                borderRadius: "999px",
-                px: 1.25,
-                py: 0.3,
-                fontSize: 11.5,
-              }}
-            >
-              {provenance}
-            </Box>
-          ) : null}
-        </Box>
+        <Typography sx={{ fontFamily: serif, fontSize: { xs: 22, md: 26 }, color: "#2E241D", mb: 2 }}>
+          {title}
+        </Typography>
       ) : null}
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2.5 }}>
         <Box

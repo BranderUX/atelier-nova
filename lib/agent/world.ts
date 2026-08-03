@@ -90,9 +90,5 @@ export const SHOPPER = {
   styleProfile:
     "Warm neutrals (cream, terracotta, sage), natural fabrics — especially linen and silk — " +
     "elevated-casual silhouettes. Prefers midi lengths, avoids loud prints and neon.",
-  fitProfile:
-    "Set up during onboarding about three months ago: Maya uploaded a full-body photo and her " +
-    "measurements. Every try-on render — the fitting room and the 'worn by you' looks — is " +
-    "generated from that Fit Profile, never from a live camera or guesswork.",
 };
 
