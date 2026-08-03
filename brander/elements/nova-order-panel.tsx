@@ -75,7 +75,7 @@ export default function Component({
     onPlaceOrder?.({ id: product.id, name: product.name, price: product.price, size, address, arrival: arrivalText });
 
   const tile = (imageUrl: string, name: string, priceLabel: string) => (
-    <Box key={name} sx={{ flex: 1, minWidth: 0, bgcolor: "#FFFFFF", borderRadius: "6px", overflow: "hidden", border: "1px solid #F0E6D6" }}>
+    <Box key={name} sx={{ width: { xs: 64, sm: 118 }, flexShrink: 0, bgcolor: "#FFFFFF", borderRadius: "6px", overflow: "hidden", border: "1px solid #F0E6D6" }}>
       <Box
         sx={{
           width: "100%",
@@ -101,7 +101,7 @@ export default function Component({
         width: "100%",
         maxWidth: 680,
         mx: "auto",
-        bgcolor: "#FFFFFF",
+        bgcolor: "#FBF4E9",
         borderRadius: "8px",
         boxShadow: "0 12px 36px rgba(62,47,40,0.14)",
         p: { xs: 2, sm: 2.5 },
@@ -142,7 +142,7 @@ export default function Component({
                       borderRadius: "4px",
                       cursor: "pointer",
                       fontSize: 13.5,
-                      bgcolor: selected ? "#C06B4A" : "#F4EDE3",
+                      bgcolor: selected ? "#C06B4A" : "#FFFFFF",
                       color: selected ? "#FDF8F0" : "#3B2E25",
                       transition: "background-color 120ms ease",
                     }}
@@ -162,7 +162,7 @@ export default function Component({
               sx={{
                 mt: 1.75,
                 borderRadius: "20px",
-                bgcolor: "#FDF8F0",
+                bgcolor: "#FFFFFF",
                 fontSize: 13.5,
                 color: "#3B2E25",
                 "& .MuiOutlinedInput-notchedOutline": { borderColor: "#E4D6C2" },
@@ -188,10 +188,10 @@ export default function Component({
                   p: 0.75,
                   borderRadius: "6px",
                   border: "1px dashed #E0CDB4",
-                  bgcolor: "#FDF8F0",
+                  bgcolor: "#FFFFFF",
                   cursor: "pointer",
                   transition: "background-color 120ms ease",
-                  "&:hover": { bgcolor: "#F7EDDD" },
+                  "&:hover": { bgcolor: "#FDF8F0" },
                 }}
               >
                 <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -236,19 +236,36 @@ export default function Component({
           </Box>
         </Box>
       ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
-          <Typography sx={{ fontFamily: serif, fontSize: 22, color: "#2E241D" }}>
-            {look?.title || "Make it a look?"}
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            // Must match the order view exactly — a view swap may never
+            // change the element's height (the host iframe would jump).
+            height: { xs: "auto", sm: 320 },
+          }}
+        >
+          <Box sx={{ display: "grid", gridTemplateColumns: "56px 1fr 56px", alignItems: "center" }}>
+            <Button
+              onClick={() => setView("order")}
+              sx={{ minWidth: 0, p: 0.5, justifySelf: "start", color: "#8A7B6E", fontSize: 12, textTransform: "none" }}
+            >
+              ← Back
+            </Button>
+            <Typography noWrap sx={{ fontFamily: serif, fontSize: 21, color: "#2E241D" }}>
+              {look?.title || "Make it a look?"}
+            </Typography>
+          </Box>
           {look?.note ? (
-            <Typography sx={{ mt: 0.5, fontSize: 12.5, color: "#8A7B6E" }}>{look.note}</Typography>
+            <Typography noWrap sx={{ mt: 0.25, fontSize: 12, color: "#8A7B6E" }}>{look.note}</Typography>
           ) : null}
-          <Box sx={{ mt: 1.75, display: "flex", gap: 1, alignItems: "stretch" }}>
+          <Box sx={{ my: "auto", py: 1, display: "flex", gap: 1, justifyContent: "center" }}>
             {tile(product.imageUrl, product.name, "in your order")}
             <Box sx={{ alignSelf: "center", px: 0.25, fontSize: 18, color: "#B4653F" }}>+</Box>
             {(look?.items || []).slice(0, 3).map((item) => tile(item.imageUrl, item.name, `$${item.price}`))}
           </Box>
-          <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             <Button
               onClick={placeSingle}
               sx={{
@@ -287,12 +304,6 @@ export default function Component({
               {`Order the full look — $${lookTotal}`}
             </Button>
           </Box>
-          <Button
-            onClick={() => setView("order")}
-            sx={{ mt: 0.75, alignSelf: "center", color: "#8A7B6E", fontSize: 12, textTransform: "none" }}
-          >
-            ← Back
-          </Button>
         </Box>
       )}
     </Box>

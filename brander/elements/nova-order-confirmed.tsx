@@ -15,7 +15,7 @@ export default function Component({ title, arrivalText, orderId, onTrackOrder }:
         width: "100%",
         maxWidth: 460,
         mx: "auto",
-        bgcolor: "#FFFFFF",
+        bgcolor: "#FBF4E9",
         borderRadius: "8px",
         boxShadow: "0 16px 44px rgba(62,47,40,0.14)",
         px: { xs: 3, md: 5 },
