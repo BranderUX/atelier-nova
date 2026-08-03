@@ -34,8 +34,30 @@ export function buildHomeResponseText(siteOrigin: string): string {
     (p): p is NonNullable<ReturnType<typeof getProduct>> => Boolean(p)
   );
 
+  const HOME_LOOKS: { id: string; title: string; note: string; itemIds: string[] }[] = [
+    {
+      id: "look-brunch",
+      title: "The brunch look",
+      note: "Two pieces you own, one to add.",
+      itemIds: ["linen-wide-leg-pants", "silk-camisole", "terracotta-jacket"],
+    },
+    {
+      id: "look-desk-dinner",
+      title: "Desk to dinner",
+      note: "Your cardigan, dressed up.",
+      itemIds: ["sage-poplin-midi", "knit-cardigan", "pearl-earrings"],
+    },
+    {
+      id: "look-golden-hour",
+      title: "Golden hour",
+      note: "For long evenings out.",
+      itemIds: ["silk-slip-dress", "cream-linen-blazer", "strappy-heels"],
+    },
+  ];
+  const ownedIds = new Set(["linen-wide-leg-pants", "knit-cardigan", "silk-camisole"]);
+
   const components = [
-    { id: "root", component: "Column", children: ["home-row", "home-suggestions"], spacing: 3 },
+    { id: "root", component: "Column", children: ["home-row", "home-looks", "home-suggestions"], spacing: 3 },
     { id: "home-row", component: "Row", children: ["home-hero", "home-picks"], spacing: 2 },
     {
       id: "home-hero",
@@ -49,6 +71,11 @@ export function buildHomeResponseText(siteOrigin: string): string {
       weight: 1,
       columns: 3,
       ...bind("home-picks", ["products"]),
+    },
+    {
+      id: "home-looks",
+      component: "custom:nova-look-board",
+      ...bind("home-looks", ["looks", "contextNote"]),
     },
     {
       id: "home-suggestions",
@@ -94,6 +121,30 @@ export function buildHomeResponseText(siteOrigin: string): string {
                 }
               : {}),
           })),
+        },
+      },
+    },
+    {
+      updateDataModel: {
+        surfaceId: "main",
+        path: "/home-looks",
+        value: {
+          looks: HOME_LOOKS.map((look) => ({
+            id: look.id,
+            title: look.title,
+            note: look.note,
+            items: look.itemIds
+              .map((id) => getProduct(id))
+              .filter((p): p is NonNullable<ReturnType<typeof getProduct>> => Boolean(p))
+              .map((p) => ({
+                id: p.id,
+                name: p.name,
+                price: p.salePrice ?? p.price,
+                imageUrl: `${siteOrigin}${p.imagePath}`,
+                ...(ownedIds.has(p.id) ? { owned: true } : {}),
+              })),
+          })),
+          contextNote: "Styled around pieces already in your wardrobe.",
         },
       },
     },

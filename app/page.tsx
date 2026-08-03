@@ -21,7 +21,7 @@ export default function AtelierNovaPage() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <main style={{ width: "100vw", height: "100dvh", overflow: "hidden", position: "relative" }}>
+    <main className="nova-main" style={{ width: "100vw", height: "100dvh", overflow: "hidden", position: "relative" }}>
       {mounted ? (
         <Brander
           betaKey={BRANDER_TOKEN}
@@ -33,52 +33,79 @@ export default function AtelierNovaPage() {
           onQueryStream={(params) => sseStream("/api/agent/stream", { params })}
         />
       ) : null}
-      {/* Attribution badge — server-rendered (crawlable backlink), always visible. */}
-      <a
-        href="https://branderux.com?utm_source=atelier-nova&utm_medium=badge&utm_campaign=demo"
-        target="_blank"
-        rel="noopener"
-        style={{
-          position: "fixed",
-          left: 14,
-          bottom: 14,
-          zIndex: 50,
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "7px 12px",
-          borderRadius: 999,
-          background: "rgba(46, 42, 38, 0.85)",
-          color: "#F7F1E8",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          fontSize: 12.5,
-          textDecoration: "none",
-          boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
-          backdropFilter: "blur(6px)",
-        }}
-      >
-        <span aria-hidden style={{ fontSize: 11 }}>✦</span>
-        Generated live by BranderUX
-      </a>
-      <a
-        href="/about"
-        style={{
-          position: "fixed",
-          right: 14,
-          bottom: 14,
-          zIndex: 50,
-          padding: "7px 12px",
-          borderRadius: 999,
-          background: "rgba(251, 244, 233, 0.9)",
-          color: "#3B2E25",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          fontSize: 12.5,
-          textDecoration: "none",
-          border: "1px solid rgba(62,47,40,0.15)",
-        }}
-      >
-        How this works
-      </a>
+      {/* Attribution badges — server-rendered (crawlable backlink), always visible.
+          Desktop: floating corner pills. Mobile: their own strip below the embed
+          (the surface shrinks by the strip height, so nothing overlaps the composer). */}
+      <div className="nova-badges">
+        <a
+          className="nova-attr"
+          href="https://branderux.com?utm_source=atelier-nova&utm_medium=badge&utm_campaign=demo"
+          target="_blank"
+          rel="noopener"
+        >
+          <span aria-hidden style={{ fontSize: 11 }}>✦</span>
+          Generated live by BranderUX
+        </a>
+        <a className="nova-how" href="/about">
+          How this works
+        </a>
+      </div>
+      <style>{`
+        .nova-badges { display: contents; }
+        .nova-attr, .nova-how {
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 12.5px;
+          text-decoration: none;
+          border-radius: 999px;
+          padding: 7px 12px;
+          z-index: 50;
+        }
+        .nova-attr {
+          position: fixed;
+          left: 14px;
+          bottom: 14px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(46, 42, 38, 0.85);
+          color: #F7F1E8;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+          backdrop-filter: blur(6px);
+        }
+        .nova-how {
+          position: fixed;
+          right: 14px;
+          bottom: 14px;
+          background: rgba(251, 244, 233, 0.9);
+          color: #3B2E25;
+          border: 1px solid rgba(62,47,40,0.15);
+        }
+        @media (max-width: 767px) {
+          .nova-main { height: calc(100dvh - 38px - env(safe-area-inset-bottom)) !important; }
+          .nova-badges {
+            display: flex;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: calc(38px + env(safe-area-inset-bottom));
+            padding: 0 12px env(safe-area-inset-bottom);
+            align-items: center;
+            justify-content: space-between;
+            background: #F1E8DC;
+            border-top: 1px solid rgba(62,47,40,0.08);
+            z-index: 50;
+          }
+          .nova-attr, .nova-how {
+            position: static;
+            font-size: 11px;
+            padding: 4px 10px;
+            box-shadow: none;
+            backdrop-filter: none;
+          }
+          .nova-attr { gap: 5px; }
+        }
+      `}</style>
     </main>
   );
 }
