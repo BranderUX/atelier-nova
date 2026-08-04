@@ -141,7 +141,7 @@ const RETRY_INSTRUCTION =
 async function streamWithBlockGuard(
   request: (messages: CustomerAIParams["messages"]) => ReturnType<Anthropic["messages"]["stream"]>,
   baseMessages: CustomerAIParams["messages"],
-  send: (event: Record<string, unknown>) => void
+  send: (event: unknown) => void
 ): Promise<void> {
   let previousText = "";
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -154,17 +154,17 @@ async function streamWithBlockGuard(
             { role: "user" as const, content: RETRY_INSTRUCTION },
           ];
     const stream = request(messages);
-    const buffered: Record<string, unknown>[] = [];
+    const buffered: unknown[] = [];
     let flushed = false;
     let text = "";
     for await (const event of anthropicStream(
       stream as AsyncIterable<MessageStreamEvent> as Parameters<typeof anthropicStream>[0]
     )) {
       if (flushed) {
-        send(event as Record<string, unknown>);
+        send(event);
         continue;
       }
-      buffered.push(event as Record<string, unknown>);
+      buffered.push(event);
       if (event.type === AGUIEventType.TEXT_MESSAGE_CONTENT) {
         text += (event as { delta?: string }).delta ?? "";
         if (text.includes("---A2UI_START---")) {
