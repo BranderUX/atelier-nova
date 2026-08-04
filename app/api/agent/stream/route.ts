@@ -84,18 +84,19 @@ export async function POST(req: Request): Promise<Response> {
     .join("\n\n---\n\n");
 
   const anthropic = new Anthropic();
-  const stream = anthropic.messages.stream({
-    model: process.env.AGENT_MODEL || DEFAULT_MODEL,
-    max_tokens: params.max_tokens ?? 6000,
-    system,
-    messages: params.messages,
-    ...(params.tools?.anthropic?.length
-      ? {
-          tools: params.tools.anthropic as Anthropic.Tool[],
-          ...(params.tool_choice ? { tool_choice: params.tool_choice } : {}),
-        }
-      : {}),
-  });
+  const request = (messages: CustomerAIParams["messages"]) =>
+    anthropic.messages.stream({
+      model: process.env.AGENT_MODEL || DEFAULT_MODEL,
+      max_tokens: params.max_tokens ?? 6000,
+      system,
+      messages,
+      ...(params.tools?.anthropic?.length
+        ? {
+            tools: params.tools.anthropic as Anthropic.Tool[],
+            ...(params.tool_choice ? { tool_choice: params.tool_choice } : {}),
+          }
+        : {}),
+    });
 
   const encoder = new TextEncoder();
   const readable = new ReadableStream<Uint8Array>({
@@ -103,11 +104,9 @@ export async function POST(req: Request): Promise<Response> {
       const send = (payload: string) =>
         controller.enqueue(encoder.encode(`data: ${payload}\n\n`));
       try {
-        for await (const event of anthropicStream(
-          stream as AsyncIterable<MessageStreamEvent> as Parameters<typeof anthropicStream>[0]
-        )) {
-          send(JSON.stringify(event));
-        }
+        await streamWithBlockGuard(request, params.messages, (event) =>
+          send(JSON.stringify(event))
+        );
       } catch (error) {
         send(
           JSON.stringify({
@@ -124,4 +123,63 @@ export async function POST(req: Request): Promise<Response> {
   });
 
   return new Response(readable, { headers: SSE_HEADERS });
+}
+
+const RETRY_INSTRUCTION =
+  "(system note) Your previous reply contained no UI block, so NO screen was rendered — the " +
+  "shopper saw nothing. Answer the request above again as a COMPLETE UI screen in the block " +
+  "format from the UI-generation instructions. Do not apologize or mention this note.";
+
+/**
+ * Stream the model while guarding the UI contract: events are buffered until the
+ * A2UI block marker appears in the text, then flushed and passed through live.
+ * A reply that finishes with NO block is discarded and silently retried once
+ * with a corrective instruction — the client only ever sees one clean run.
+ * If the retry also produces no block, its text is flushed so the shopper at
+ * least gets the sentence.
+ */
+async function streamWithBlockGuard(
+  request: (messages: CustomerAIParams["messages"]) => ReturnType<Anthropic["messages"]["stream"]>,
+  baseMessages: CustomerAIParams["messages"],
+  send: (event: Record<string, unknown>) => void
+): Promise<void> {
+  let previousText = "";
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const messages =
+      attempt === 0
+        ? baseMessages
+        : [
+            ...baseMessages,
+            { role: "assistant" as const, content: previousText.trim() || "(empty reply)" },
+            { role: "user" as const, content: RETRY_INSTRUCTION },
+          ];
+    const stream = request(messages);
+    const buffered: Record<string, unknown>[] = [];
+    let flushed = false;
+    let text = "";
+    for await (const event of anthropicStream(
+      stream as AsyncIterable<MessageStreamEvent> as Parameters<typeof anthropicStream>[0]
+    )) {
+      if (flushed) {
+        send(event as Record<string, unknown>);
+        continue;
+      }
+      buffered.push(event as Record<string, unknown>);
+      if (event.type === AGUIEventType.TEXT_MESSAGE_CONTENT) {
+        text += (event as { delta?: string }).delta ?? "";
+        if (text.includes("---A2UI_START---")) {
+          for (const held of buffered) send(held);
+          buffered.length = 0;
+          flushed = true;
+        }
+      }
+    }
+    if (flushed) return;
+    // No block in this attempt: drop its events and retry (or flush on final failure).
+    if (attempt === 1) {
+      for (const held of buffered) send(held);
+      return;
+    }
+    previousText = text;
+  }
 }
