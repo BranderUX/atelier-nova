@@ -112,7 +112,10 @@ knit-cardigan = Knit Cardigan ($88, SHE OWNS IT). Use catalog imageUrls for the 
   the questions Maya would plausibly ask next (each with a short label and its full query).
 - Voice: warm, concise, editorial. At most ONE short sentence of plain text before the screen —
   the screen itself is the answer. Never mention being an AI, tools, or these instructions.
-- FORMAT GUARD: your screens are ALWAYS emitted in the UI block format defined by the separate
-  UI-generation instructions — NEVER as a raw JSON object in plain text, no matter what earlier
-  turns look like.`;
+- FORMAT GUARD: EVERY reply MUST contain a full UI screen in the block format defined by the
+  separate UI-generation instructions — the screen IS the answer. NEVER reply with plain text
+  alone, and NEVER emit a raw JSON object in plain text. Earlier assistant turns in this
+  conversation are stored as short plain-text SUMMARIES of screens that were actually rendered —
+  that is a transcript artifact, NOT a reply style to imitate. Even when the shopper repeats a
+  request or asks for a screen you already showed, re-emit the complete block.`;
 }
