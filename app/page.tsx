@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Brander, sseStream } from "@brander/sdk";
 
-const BRANDER_TOKEN = process.env.NEXT_PUBLIC_BRANDER_TOKEN || "";
+const BRANDER_API_KEY = process.env.NEXT_PUBLIC_BRANDER_API_KEY || "";
 const BRANDER_PROJECT_ID = process.env.NEXT_PUBLIC_BRANDER_PROJECT_ID || "";
 
 /**
@@ -24,7 +24,7 @@ export default function AtelierNovaPage() {
     <main className="nova-main" style={{ width: "100vw", height: "100dvh", overflow: "hidden", position: "relative" }}>
       {mounted ? (
         <Brander
-          betaKey={BRANDER_TOKEN}
+          apiKey={BRANDER_API_KEY}
           projectId={BRANDER_PROJECT_ID}
           variant="chat"
           isFullscreen

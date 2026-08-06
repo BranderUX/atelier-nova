@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
-    "@brander/sdk": "^0.3.23",
+    "@brander/sdk": "^0.4.1",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.3",
     "@vercel/analytics": "^2.0.1",

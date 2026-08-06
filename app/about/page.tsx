@@ -113,7 +113,7 @@ export default function AboutPage() {
         }}
       >
         {`<Brander
-  betaKey={TOKEN}
+  apiKey={API_KEY}
   projectId={PROJECT_ID}
   variant="chat"
   onQueryStream={(params) => sseStream("/api/agent/stream", { params })}
