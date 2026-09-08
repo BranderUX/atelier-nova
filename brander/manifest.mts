@@ -1,5 +1,5 @@
 /**
- * Metadata for the Nova custom elements — everything the BranderUX
+ * Metadata for the Nova custom elements, everything the BranderUX
  * custom-element API needs beyond the TSX in brander/elements/. `__SITE__`
  * tokens in defaultProps are replaced with the storefront origin at seed time.
  *
@@ -30,9 +30,9 @@ const PRODUCT_ITEM_SCHEMA = {
     id: { type: "string", description: "Catalog product id" },
     name: { type: "string" },
     price: { type: "number" },
-    salePrice: { type: "number", description: "Discounted price — show only for sale items" },
+    salePrice: { type: "number", description: "Discounted price, show only for sale items" },
     imageUrl: { type: "string", description: "Absolute product image URL" },
-    badge: { type: "string", description: "Corner ribbon text, e.g. 'Recommended' — at most one per grid" },
+    badge: { type: "string", description: "Corner ribbon text, e.g. 'Recommended', at most one per grid" },
     badgeReason: {
       type: "string",
       description:
@@ -41,7 +41,7 @@ const PRODUCT_ITEM_SCHEMA = {
     badgeImageUrl: {
       type: "string",
       description:
-        "When badgeReason references ANOTHER product (a pairing piece), its catalog imageUrl — shown as a thumbnail inside the tooltip.",
+        "When badgeReason references ANOTHER product (a pairing piece), its catalog imageUrl, shown as a thumbnail inside the tooltip.",
     },
     sizeChip: { type: "string", description: "Small chip under the price, e.g. 'Size M'" },
   },
@@ -78,7 +78,7 @@ export const ELEMENTS: ElementSeed[] = [
             type: "object",
             properties: {
               id: { type: "string" },
-              title: { type: "string", description: "e.g. 'Day one — old town'" },
+              title: { type: "string", description: "e.g. 'Day one, old town'" },
               note: { type: "string", description: "One line on why this look works" },
               items: {
                 type: "array",
@@ -135,7 +135,7 @@ export const ELEMENTS: ElementSeed[] = [
       contextNote: "Everything arrives before your flight.",
     },
     structurePrompt:
-      "Use for trips, packing capsules and multi-outfit plans. Compose 2–4 looks mixing pieces the shopper OWNS (owned: true, from purchase history — never price those) with gap pieces to buy; give each look a short title + note; contextNote carries the delivery-before-the-trip promise.",
+      "Use for trips, packing capsules and multi-outfit plans. Compose 2–4 looks mixing pieces the shopper OWNS (owned: true, from purchase history, never price those) with gap pieces to buy; give each look a short title + note; contextNote carries the delivery-before-the-trip promise.",
     clickQueryTemplate: JSON.stringify({
       $primary: "Show details and order options for {name} (ID: {id})",
       onShopCapsule: "Order all the missing pieces from my capsule: {itemNames} (total ${total})",
@@ -170,9 +170,9 @@ export const ELEMENTS: ElementSeed[] = [
               imageUrl: {
                 type: "string",
                 description:
-                  "Absolute URL of a pre-rendered try-on shot from the fitting-room assets — NEVER a plain product image or an invented URL",
+                  "Absolute URL of a pre-rendered try-on shot from the fitting-room assets, NEVER a plain product image or an invented URL",
               },
-              priceLabel: { type: "string", description: "Price chip for the missing pieces, e.g. 'Add the jacket — $164'" },
+              priceLabel: { type: "string", description: "Price chip for the missing pieces, e.g. 'Add the jacket, $164'" },
             },
             required: ["id", "title", "caption", "imageUrl"],
           },
@@ -189,26 +189,26 @@ export const ELEMENTS: ElementSeed[] = [
           title: "Weekend layers",
           caption: "Your linen pants + camisole, with the Terracotta Jacket",
           imageUrl: "__SITE__/products/fitting/fit-pants-cami--terracotta-jacket.jpg",
-          priceLabel: "Add the jacket — $164",
+          priceLabel: "Add the jacket, $164",
         },
         {
           id: "look-golden-hour",
           title: "Golden hour",
           caption: "The Silk Slip Dress under your Knit Cardigan",
           imageUrl: "__SITE__/products/fitting/fit-slip-dress--knit-cardigan.jpg",
-          priceLabel: "Add the dress — $142",
+          priceLabel: "Add the dress, $142",
         },
         {
           id: "look-desk-dinner",
           title: "Desk to dinner",
           caption: "The Linen Wrap Dress with the Terracotta Jacket",
           imageUrl: "__SITE__/products/fitting/fit-wrap-dress--terracotta-jacket.jpg",
-          priceLabel: "Both pieces — $292",
+          priceLabel: "Both pieces, $292",
         },
       ],
     },
     structurePrompt:
-      "Editorial try-on strip for home and lookbook moments. Use ONLY combinations that exist in the fitting-room asset map in context — imageUrl must be one of those pre-rendered try-on URLs. Caption names the pieces (mark owned ones as 'your …'); priceLabel prices only what's missing.",
+      "Editorial try-on strip for home and lookbook moments. Use ONLY combinations that exist in the fitting-room asset map in context, imageUrl must be one of those pre-rendered try-on URLs. Caption names the pieces (mark owned ones as 'your …'); priceLabel prices only what's missing.",
     clickQueryTemplate: "Shop the '{title}' look: {caption}",
     interactionPropName: "onSelectLook",
   },
@@ -217,7 +217,7 @@ export const ELEMENTS: ElementSeed[] = [
     name: "Nova Fitting Room",
     key: "nova-fitting-room",
     description:
-      "Interactive styling room: a full-body outfit figure on the left, clothing cards on the right — drag a piece onto the figure (or tap it) and it swaps instantly from a pre-rendered image map. No queries during play; one CTA orders the styled look.",
+      "Interactive styling room: a full-body outfit figure on the left, clothing cards on the right, drag a piece onto the figure (or tap it) and it swaps instantly from a pre-rendered image map. No queries during play; one CTA orders the styled look.",
     category: "interactive",
     iconName: "Shirt",
     propsSchema: {
@@ -227,7 +227,7 @@ export const ELEMENTS: ElementSeed[] = [
         figureMap: {
           type: "object",
           description:
-            "Pre-rendered try-on images keyed '{baseId}--{layerId}' ('none' = no layer). Pass EXACTLY the map provided in context — never invent keys or URLs.",
+            "Pre-rendered try-on images keyed '{baseId}--{layerId}' ('none' = no layer). Pass EXACTLY the map provided in context, never invent keys or URLs.",
           additionalProperties: { type: "string" },
         },
         bases: {
@@ -289,7 +289,7 @@ export const ELEMENTS: ElementSeed[] = [
       initialBaseId: "pants-cami",
     },
     structurePrompt:
-      "Use when the shopper wants to play with combinations or try pieces together. Pass EXACTLY the figureMap, bases and layers from the styling-room assets in context — the images are pre-rendered for those combinations only. Titles stay combination-flavored ('Mix & match'), never 'on you'.",
+      "Use when the shopper wants to play with combinations or try pieces together. Pass EXACTLY the figureMap, bases and layers from the styling-room assets in context, the images are pre-rendered for those combinations only. Titles stay combination-flavored ('Mix & match'), never 'on you'.",
     clickQueryTemplate: "Order the look I styled on myself: {lookNames} (total ${total})",
     interactionPropName: "onOrderLook",
   },
@@ -298,7 +298,7 @@ export const ELEMENTS: ElementSeed[] = [
     name: "Nova Suggestions",
     key: "nova-suggestions",
     description:
-      "A row of 2–4 tappable follow-up chips that keep the conversation going — each carries a short label and the full query it fires.",
+      "A row of 2–4 tappable follow-up chips that keep the conversation going, each carries a short label and the full query it fires.",
     category: "interactive",
     iconName: "Sparkles",
     propsSchema: {
@@ -413,7 +413,7 @@ export const ELEMENTS: ElementSeed[] = [
       columns: 3,
     },
     structurePrompt:
-      "The standard product listing block for home picks, categories, search results and occasion edits. Pass products[] with absolute imageUrls; badge ONLY the single most recommended item, ALWAYS with a personal one-line badgeReason (why it suits this shopper — style profile or purchase history); add sizeChip with the shopper's size on the recommended item.",
+      "The standard product listing block for home picks, categories, search results and occasion edits. Pass products[] with absolute imageUrls; badge ONLY the single most recommended item, ALWAYS with a personal one-line badgeReason (why it suits this shopper, style profile or purchase history); add sizeChip with the shopper's size on the recommended item.",
     clickQueryTemplate: "Show details and order options for {name} (ID: {id})",
     interactionPropName: "onSelectProduct",
   },
@@ -436,11 +436,11 @@ export const ELEMENTS: ElementSeed[] = [
             type: "string",
             enum: ["machine-wash-cold", "hand-wash", "no-bleach", "line-dry", "iron-low", "dry-clean"],
           },
-          description: "Fabric-care symbols to display — only for care answers",
+          description: "Fabric-care symbols to display, only for care answers",
         },
-        thumbnailUrl: { type: "string", description: "Product thumbnail — switches to the compact pairing-note layout" },
+        thumbnailUrl: { type: "string", description: "Product thumbnail, switches to the compact pairing-note layout" },
         metaLine: { type: "string", description: "Small meta line, e.g. 'Ordered Jul 9'" },
-        footerHighlight: { type: "string", description: "Highlighted footer, e.g. 'Fit: true to size — your usual M'" },
+        footerHighlight: { type: "string", description: "Highlighted footer, e.g. 'Fit: true to size, your usual M'" },
         productId: { type: "string", description: "Catalog id of the referenced product" },
         productName: { type: "string", description: "Name of the referenced product" },
       },
@@ -451,7 +451,7 @@ export const ELEMENTS: ElementSeed[] = [
       careIcons: ["machine-wash-cold", "no-bleach", "line-dry", "iron-low"],
       bodyText:
         "Our linen blend is designed for easy care. Machine wash cold on a gentle cycle and line dry to maintain its natural texture and longevity.",
-      footerHighlight: "Fit: true to size — your usual M",
+      footerHighlight: "Fit: true to size, your usual M",
     },
     structurePrompt:
       "Use to ANSWER a question or voice a suggestion. Care/fit answers: title + careIcons + bodyText + footerHighlight. Pairing/memory suggestions: thumbnailUrl + bodyText + metaLine + productId/productName.",
@@ -480,7 +480,7 @@ export const ELEMENTS: ElementSeed[] = [
           required: ["id", "name", "price", "imageUrl"],
         },
         sizes: { type: "array", items: { type: "string" }, description: "Available sizes" },
-        preselectedSize: { type: "string", description: "The shopper's size — preselect it" },
+        preselectedSize: { type: "string", description: "The shopper's size, preselect it" },
         addresses: { type: "array", items: { type: "string" }, description: "The shopper's delivery addresses" },
         preselectedAddress: { type: "string", description: "Default delivery address" },
         arrivalText: { type: "string", description: "Delivery promise, e.g. 'Arrives Sunday, Jul 26'" },
@@ -507,8 +507,8 @@ export const ELEMENTS: ElementSeed[] = [
       },
       sizes: ["S", "M", "L", "XL"],
       preselectedSize: "M",
-      addresses: ["Home — Dizengoff 12", "Work — Rothschild 45"],
-      preselectedAddress: "Home — Dizengoff 12",
+      addresses: ["Home, Dizengoff 12", "Work, Rothschild 45"],
+      preselectedAddress: "Home, Dizengoff 12",
       arrivalText: "Arrives Sunday, Jul 26",
       completeTheLook: {
         title: "Complete the look",

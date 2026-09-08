@@ -1,78 +1,33 @@
 /**
  * Seeds the "Atelier Nova" BranderUX project directly through the Spring Boot
  * REST API: project + brand settings + flexible-mode settings + custom pages +
- * the six Nova custom elements (code from brander/elements/, metadata from
- * brander/manifest.mts). No Vibe Studio, no billed extract pass.
+ * the nine Nova custom elements (code from brander/elements/, metadata from
+ * brander/manifest.mts) + the custom screens (brander/screens.mts). The hosted
+ * agent, its data and its home page are seeded by seed-hosted-agent.mts, which
+ * `npm run seed` runs right after this script.
  *
  * Usage:
- *   BRANDER_COOKIE='SESSION=…' npm run seed
+ *   BRANDER_REFRESH_TOKEN=... BRANDER_API_BASE=... npm run seed
  *
  * Env:
- *   BRANDER_COOKIE    required — the session cookie of a signed-in BranderUX user
- *   BRANDER_API_BASE  default http://localhost:8080/api/v1 (point at prod to promote)
- *   SITE_URL          default http://localhost:3001 — origin serving /products images
- *   PROJECT_ID        optional — seed into an existing project instead of by-name lookup
+ *   BRANDER_REFRESH_TOKEN  preferred; BRANDER_COOKIE ('auth_token=...') also works
+ *   BRANDER_API_BASE       default http://localhost:8080/api/v1 (point at prod to promote)
+ *   SITE_URL               default https://nova.branderux.app, the origin serving /products images
+ *   PROJECT_ID             optional, seed into an existing project instead of the by-name lookup
  *
  * Idempotent: re-running updates the project in place and appends new element
  * versions rather than duplicating elements.
  */
 
 import { readFile } from "node:fs/promises";
+import { FLEXIBLE_MODE_RULES } from "../brander/data/entities.mts";
 import { ELEMENTS } from "../brander/manifest.mts";
 import { CUSTOM_SCREENS } from "../brander/screens.mts";
+import { createApi, resolveCookie, stable, withSite } from "./lib/api.mts";
 
-const API_BASE = process.env.BRANDER_API_BASE || "http://localhost:8080/api/v1";
-const SITE_URL = (process.env.SITE_URL || "http://localhost:3001").replace(/\/$/, "");
 const PROJECT_NAME = "Atelier Nova";
 
-/**
- * Auth: prefer a long-lived refresh token (BRANDER_REFRESH_TOKEN) — the script
- * mints a fresh 1h access token via POST /auth/refresh. BRANDER_COOKIE
- * ('auth_token=…') still works for one-off runs.
- */
-async function resolveCookie(): Promise<string> {
-  const refresh = process.env.BRANDER_REFRESH_TOKEN;
-  if (refresh) {
-    const response = await fetch(`${API_BASE}/auth/refresh`, {
-      method: "POST",
-      headers: { Cookie: `refresh_token=${refresh}` },
-    });
-    if (!response.ok) {
-      console.error(`auth refresh failed: ${response.status} ${(await response.text()).slice(0, 200)}`);
-      process.exit(1);
-    }
-    const setCookies = response.headers.getSetCookie();
-    const authCookie = setCookies
-      .find((c) => c.startsWith("auth_token="))
-      ?.split(";")[0];
-    if (!authCookie) {
-      console.error("auth refresh succeeded but no auth_token cookie in response");
-      process.exit(1);
-    }
-    return authCookie;
-  }
-  if (process.env.BRANDER_COOKIE) return process.env.BRANDER_COOKIE;
-  console.error("Set BRANDER_REFRESH_TOKEN (preferred) or BRANDER_COOKIE ('auth_token=…').");
-  process.exit(1);
-}
-
-const COOKIE = await resolveCookie();
-
-async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: {
-      Cookie: COOKIE,
-      "Content-Type": "application/json",
-      ...(init?.headers || {}),
-    },
-  });
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`${init?.method || "GET"} ${path} → ${response.status}: ${body.slice(0, 500)}`);
-  }
-  return response.status === 204 ? (null as T) : ((await response.json()) as T);
-}
+const api = createApi(await resolveCookie());
 
 const iconPng = await readFile(new URL("../public/brand/icon.png", import.meta.url));
 
@@ -116,24 +71,22 @@ const PROJECT_SETTINGS = {
     { id: "page-knitwear", name: "Knitwear", query: "Show me the knitwear collection" },
     { id: "page-sale", name: "Sale", query: "Show me what's on sale" },
   ],
-  flexibleModeRules: [
-    "This is the ATELIER NOVA storefront — compose screens like an elegant fashion e-commerce site.",
-    "Home page: the Nova Hero beside a Nova Product Grid of SIX picks (columns: 3) — badge ONLY the most recommended item, always with a personal badgeReason, and give it the shopper's size chip.",
-    "Category pages (New In, Dresses, Knitwear, Sale): a short header, then ONE Nova Product Grid. Show sale prices via salePrice.",
-    "Opening/buying a specific product: a Nova Order Panel (her size preselected, default address, arrival promise) — ALWAYS with completeTheLook filled with 2–4 genuinely pairing pieces and a personal note.",
-    "Care, fit or styling questions about a product: the Nova Stylist Note AND that product's Nova Order Panel side by side on the SAME screen — the answer and the buy belong together.",
-    "Right after an order is placed: show ONLY a Nova Order Confirmed.",
-    "Occasion or event requests: a header naming the occasion, a Nova Product Grid of the matching pieces, and a Nova Complete Look bundle with a bundleNote explaining the reasoning.",
-    "Trip or packing requests: a short header naming the trip, then ONE Nova Look Board (3–4 looks; pieces she owns marked owned and unpriced; gap pieces priced; contextNote = the arrives-before-your-flight promise). No product grid on trip screens.",
-    "Try-on requests ('see it on me'): ONLY a Nova Fitting Room element, with EXACTLY the pre-rendered figureMap/bases/layers supplied in the agent's context — never invented combinations.",
-    "End EVERY screen with a Nova Suggestions row: 2–4 short follow-ups contextual to what the screen shows (e.g. on an order panel: 'Three ways to wear it', 'Will it shrink?'; on a confirmation: 'Track my order', 'Keep shopping'). Never generic, always tappable next steps.",
-    "Keep layouts calm and editorial — at most three content blocks per screen (the suggestions row does not count). Always use absolute image URLs supplied in the context.",
-  ].join(" "),
+  flexibleModeRules: FLEXIBLE_MODE_RULES,
 };
 
 interface ProjectResponse {
   id: string;
   name: string;
+  settings?: Record<string, unknown> | null;
+}
+
+/** PATCH replaces `settings` wholesale, so merge over what the project holds (elementVisibility, ...). */
+async function updateProject(id: string, body: Record<string, unknown>): Promise<ProjectResponse> {
+  const current = await api<ProjectResponse>(`/projects/${id}`);
+  return api<ProjectResponse>(`/projects/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ ...body, settings: { ...(current.settings ?? {}), ...PROJECT_SETTINGS } }),
+  });
 }
 
 interface ElementResponse {
@@ -155,29 +108,23 @@ async function upsertProject(): Promise<ProjectResponse> {
   const body = {
     name: PROJECT_NAME,
     description:
-      "Atelier Nova — demo storefront for the full agentic-app example (github.com/BranderUX/atelier-nova).",
+      "Atelier Nova, the demo storefront of the full agentic-app example (github.com/BranderUX/atelier-nova).",
     brandSettings: BRAND_SETTINGS,
     settings: PROJECT_SETTINGS,
   };
 
   const explicitId = process.env.PROJECT_ID;
   if (explicitId) {
-    const updated = await api<ProjectResponse>(`/projects/${explicitId}`, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    });
-    console.warn(`↻ Updated existing project ${explicitId}`);
+    const updated = await updateProject(explicitId, body);
+    console.warn(`~ Updated existing project ${explicitId}`);
     return updated;
   }
 
   const projects = await api<ProjectResponse[]>(`/projects`);
   const existing = projects.find((p) => p.name === PROJECT_NAME);
   if (existing) {
-    const updated = await api<ProjectResponse>(`/projects/${existing.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    });
-    console.warn(`↻ Updated existing project ${existing.id}`);
+    const updated = await updateProject(existing.id, body);
+    console.warn(`~ Updated existing project ${existing.id}`);
     return updated;
   }
 
@@ -185,24 +132,8 @@ async function upsertProject(): Promise<ProjectResponse> {
     method: "POST",
     body: JSON.stringify(body),
   });
-  console.warn(`✚ Created project ${created.id}`);
+  console.warn(`+ Created project ${created.id}`);
   return created;
-}
-
-function withSite(value: unknown): unknown {
-  return JSON.parse(JSON.stringify(value).replaceAll("__SITE__", SITE_URL));
-}
-
-/** Key-order-independent serialization — the server's JSONB storage reorders object keys. */
-function stable(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(stable).join(",")}]`;
-  if (value && typeof value === "object") {
-    return `{${Object.entries(value as Record<string, unknown>)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([k, v]) => `${JSON.stringify(k)}:${stable(v)}`)
-      .join(",")}}`;
-  }
-  return JSON.stringify(value) ?? "null";
 }
 
 async function seedElements(projectId: string): Promise<void> {
@@ -253,7 +184,7 @@ async function seedElements(projectId: string): Promise<void> {
         method: "PATCH",
         body: JSON.stringify({ status: "published", description: seed.description, iconName: seed.iconName, category: seed.category }),
       });
-      console.warn(`↻ ${seed.name}: appended v${appended.version} (element ${match.id})`);
+      console.warn(`~ ${seed.name}: appended v${appended.version} (element ${match.id})`);
     } else {
       const created = await api<ElementResponse>(`/projects/${projectId}/elements`, {
         method: "POST",
@@ -266,7 +197,7 @@ async function seedElements(projectId: string): Promise<void> {
           version,
         }),
       });
-      console.warn(`✚ ${seed.name}: created as ${created.elementKey} (element ${created.id})`);
+      console.warn(`+ ${seed.name}: created as ${created.elementKey} (element ${created.id})`);
     }
   }
 }
@@ -293,7 +224,7 @@ async function seedScreens(projectId: string): Promise<void> {
     method: "PATCH",
     body: JSON.stringify({ customScreens: screens }),
   });
-  console.warn(`↻ Seeded ${screens.length} custom screens (element versions pinned to current)`);
+  console.warn(`~ Seeded ${screens.length} custom screens (element versions pinned to current)`);
 }
 
 const project = await upsertProject();
@@ -302,4 +233,5 @@ await seedScreens(project.id);
 
 console.warn("\nDone. Wire the storefront with:");
 console.warn(`  NEXT_PUBLIC_BRANDER_PROJECT_ID=${project.id}`);
-console.warn("  NEXT_PUBLIC_BRANDER_TOKEN=<a bux_ beta/API key valid on this environment>");
+console.warn("  NEXT_PUBLIC_BRANDER_API_KEY=<a bux_pk_ key whose allowed origins include this site>");
+console.warn("Then seed the hosted agent: npm run seed:agent");

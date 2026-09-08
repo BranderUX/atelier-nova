@@ -1,31 +1,40 @@
 # Atelier Nova
 
-> Atelier Nova is a demo fashion storefront with no pages: every screen — the
-> personalized home, the catalog, the interactive fitting room, the order flow —
-> is generated at runtime by BranderUX from an AI agent's answers. The entire
-> frontend is one component; the repo is an open-source reference for building
-> full agentic applications.
+> Atelier Nova is a womenswear store with no pages: the home, the catalog, the
+> interactive fitting room and the order flow are all screens generated live by
+> the agent BranderUX hosts for it, built at the moment of the question, in the
+> brand. The frontend is one component in a thin Next.js shell, open source.
 
-Atelier Nova demonstrates "generative UI" / "agentic commerce": instead of a
-chatbot answering in text, the agent's answers become branded, interactive
-screens. Clicks flow back to the agent as new queries, so the interface and the
-conversation are the same loop. The screens are composed from pre-built,
-brand-styled elements (not code generation at runtime), which guarantees brand
-fidelity and safety while the AI decides composition and data.
+App builders generate pages once, the same app for everyone. A BranderUX
+application is generated live: every screen built at the moment of the question,
+with the right UX for that user and that action. And it publishes two-sided, a
+full site for people, an MCP app for AI agents.
 
-Built with [BranderUX](https://branderux.com) — AI-UX infrastructure that turns
-any AI agent into a full branded application, website or MCP app.
+Clicks are questions: clicking a product opens its order panel, right-clicking
+anything asks about it, so the interface and the conversation are one loop.
+Screens compose from branded elements, nine of them custom to this store, rather
+than from code written on the fly. Orders placed here are real records: the
+confirmation carries a number, "Track my order" reads it back, and every
+conversation and every order is visible to the owner in the BranderUX dashboard.
+
+Your website talks with your clients, by your rules: the AI can never act alone,
+visitors confirm every real action with a click, you approve who gets in, your
+data stays yours, and every conversation is visible to you.
+
+Built on [BranderUX](https://branderux.com). Build agentic applications, in
+minutes.
 
 ## Pages
 
-- [Home](/) — the live demo (client-rendered BranderUX surface)
-- [How it works](/about) — architecture, screenshots, FAQ
+- [Home](/): the live store, one BranderUX surface
+- [How it works](/about): the architecture, screenshots, FAQ
 
 ## Source
 
-- [GitHub repository](https://github.com/BranderUX/atelier-nova) — the complete
-  storefront: a Next.js shell, one agent API route, the custom element sources,
-  and the seed script that provisions the BranderUX project.
-- [BranderUX](https://branderux.com) — the platform generating the screens.
-- [@brander/sdk](https://www.npmjs.com/package/@brander/sdk) — the NPM package
-  embedding the surface.
+- [GitHub repository](https://github.com/BranderUX/atelier-nova): the complete
+  shell, a Next.js app whose store surface is one component, the custom element
+  sources, and the seed scripts that provision the BranderUX project.
+- [BranderUX](https://branderux.com): the platform the store is built and hosted
+  on.
+- [@brander/sdk](https://www.npmjs.com/package/@brander/sdk): the npm package the
+  shell uses.

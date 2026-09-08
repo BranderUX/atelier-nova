@@ -5,7 +5,7 @@
  *
  * Position/size follow the Screen Builder's normalized shape (mirrors screens
  * Lev corrected in the builder 2026-08-03):
- *  - position: { row, column, subRow } — ALL 0-BASED
+ *  - position: { row, column, subRow }, ALL 0-BASED
  *  - size: responsive `{ md, xs }` percent widths with a matching flex string,
  *    height "auto"; maxWidth/alignSelf for centered single-element screens.
  */
@@ -106,11 +106,16 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
   screen(
     "custom-nova-home",
     "Nova Home",
-    "Personalized storefront home: campaign hero beside this week's picks.",
+    "Personalized storefront home: campaign hero beside this week's picks, an editorial looks strip and follow-up chips.",
     {
       whenToUse: "The shopper's home page, landing view, or 'show me my picks / what's new for me'.",
-      exampleQueries: ["Show me my personalized home page", "Take me home", "What's new for me?"],
-      clickedElements: ["product card → open its order panel", "hero CTA → open the campaign edit"],
+      exampleQueries: ["Show home page", "Show me my personalized home page", "Take me home", "What's new for me?"],
+      clickedElements: [
+        "product card → open its order panel",
+        "hero CTA → open the campaign edit",
+        "editorial look → shop that look",
+        "suggestion chip → its query",
+      ],
     },
     [
       novaEl("home-hero", "nova-hero", 0, 0, pctSize("50.00"), "Campaign hero with personal greeting"),
@@ -122,6 +127,8 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
         pctSize("50.00"),
         "This week's picks; badge + badgeReason on the single recommended item"
       ),
+      novaEl("home-looks", "nova-look-editorial", 1, 0, pctSize("100.00"), "Editorial try-on strip: three pre-rendered looks"),
+      novaEl("home-suggestions", "nova-suggestions", 2, 0, pctSize("100.00"), "Four follow-up chips"),
     ]
   ),
   screen(
@@ -183,7 +190,7 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
     "Nova Occasion Edit",
     "Occasion shopping edit: title, matching pieces, a composed outfit for the event.",
     {
-      whenToUse: "Dressing for an event or occasion (a party, dinner date) — a curated edit plus one composed outfit.",
+      whenToUse: "Dressing for an event or occasion (a party, dinner date), a curated edit plus one composed outfit.",
       exampleQueries: ["What should I wear to a summer garden party?", "Dress me for a dinner event"],
       clickedElements: ["product card → order panel", "Add the missing pieces → outfit order"],
     },
@@ -217,7 +224,7 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
       clickedElements: ["look item → its order panel", "Add the missing pieces → capsule order"],
     },
     [
-      headerEl("trip-title", 0, "Trip name, e.g. 'Lisbon — four days'"),
+      headerEl("trip-title", 0, "Trip name, e.g. 'Lisbon, four days'"),
       novaEl(
         "trip-capsule",
         "nova-look-board",
@@ -251,7 +258,7 @@ export const CUSTOM_SCREENS: WireCustomScreen[] = [
   screen(
     "custom-nova-stylist-answer",
     "Nova Stylist Answer",
-    "The stylist's answer beside the product's order panel — the answer and the buy are one screen.",
+    "The stylist's answer beside the product's order panel, the answer and the buy are one screen.",
     {
       whenToUse: "Care, fit, fabric or styling questions about a product; pairing/memory suggestions.",
       exampleQueries: ["Will this shrink in the wash?", "What goes with the linen pants I bought?"],

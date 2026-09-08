@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Brander, sseStream } from "@brander/sdk";
+import { Brander } from "@brander/sdk";
 
 const BRANDER_API_KEY = process.env.NEXT_PUBLIC_BRANDER_API_KEY || "";
 const BRANDER_PROJECT_ID = process.env.NEXT_PUBLIC_BRANDER_PROJECT_ID || "";
 
 /**
- * The whole site is one full-screen Brander surface. Every screen — home,
- * store sections, order flow, occasion edits — is generated at runtime by
- * BranderUX from the agent's answers (see /api/agent/stream).
+ * The whole store is one full-screen Brander surface. Every screen, the home,
+ * the store sections, the order flow, the occasion edits, is generated live by
+ * the agent BranderUX hosts for this project: no handler here, no model key.
  *
  * Brander mounts client-side only: the SDK resolves its embed origin from
  * window.location at module scope, so an SSR-prerendered iframe would bake in
@@ -28,12 +28,9 @@ export default function AtelierNovaPage() {
           projectId={BRANDER_PROJECT_ID}
           variant="chat"
           isFullscreen
-          width="100%"
-          height="100%"
-          onQueryStream={(params) => sseStream("/api/agent/stream", { params })}
         />
       ) : null}
-      {/* Attribution badges — server-rendered (crawlable backlink), always visible.
+      {/* Attribution badges, server-rendered (crawlable backlink), always visible.
           Desktop: floating corner pills. Mobile: their own strip below the embed
           (the surface shrinks by the strip height, so nothing overlaps the composer). */}
       <div className="nova-badges">

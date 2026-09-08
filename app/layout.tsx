@@ -4,23 +4,23 @@ import type { ReactNode } from "react";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nova.branderux.app";
 
-const TITLE = "Atelier Nova — a storefront generated live by BranderUX";
+const TITLE = "Atelier Nova, a storefront generated live by BranderUX";
 const DESCRIPTION =
-  "Atelier Nova has no pages. Every screen — home, catalog, try-on, checkout — is generated at " +
-  "runtime by BranderUX from an AI agent's answers. A complete, open-source example of an " +
-  "agentic application.";
+  "Atelier Nova has no pages. The home, the catalog, the fitting room and the order flow are " +
+  "screens generated live by the agent BranderUX hosts for the store. The frontend is one " +
+  "component.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
+    "agentic application",
     "generative UI",
     "agentic commerce",
-    "AI generated storefront",
+    "generated live",
     "runtime UI generation",
     "BranderUX",
-    "AI UX infrastructure",
   ],
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Atelier Nova",
     type: "website",
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Atelier Nova — generated live by BranderUX" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Atelier Nova, generated live by BranderUX" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           background: "#F1E8DC",
         }}
       >
-        {/* Fast perceived first paint: the canned home's hero image starts downloading immediately */}
+        {/* Fast perceived first paint: the designed home's hero image starts downloading immediately */}
         <link rel="preload" as="image" href="/products/hero-summer-edit.jpg" />
         <script
           type="application/ld+json"

@@ -143,7 +143,7 @@ export default function Component({
 
         <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 1 }}>
           <Typography sx={{ fontSize: 12.5, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8A7B6E" }}>
-            Layers — drag onto the figure or tap
+            Layers, drag onto the figure or tap
           </Typography>
           {layers.map((piece) => cardRow(piece, "layer", piece.id === layerId))}
           <Typography sx={{ mt: 1, fontSize: 12.5, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8A7B6E" }}>
@@ -172,7 +172,7 @@ export default function Component({
               "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
             }}
           >
-            {total > 0 ? `Order this look — $${total}` : "Order this look"}
+            {total > 0 ? `Order this look, $${total}` : "Order this look"}
           </Button>
         </Box>
       </Box>

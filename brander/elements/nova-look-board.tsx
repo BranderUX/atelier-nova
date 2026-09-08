@@ -141,7 +141,7 @@ export default function Component({
         }}
       >
         <Typography sx={{ fontSize: 13.5, color: "#5C4F43" }}>
-          {contextNote || `${missingItems.length} pieces to add — the rest is already in your wardrobe.`}
+          {contextNote || `${missingItems.length} pieces to add, the rest is already in your wardrobe.`}
         </Typography>
         <Button
           onClick={() =>
@@ -163,7 +163,7 @@ export default function Component({
             "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
           }}
         >
-          {ctaLabel || `Add the missing pieces — $${total}`}
+          {ctaLabel || `Add the missing pieces, $${total}`}
         </Button>
       </Box>
     </Box>
