@@ -2,19 +2,19 @@
   "name": "atelier-nova",
   "version": "0.1.0",
   "private": true,
-  "description": "Atelier Nova — a full agentic storefront built on BranderUX. The entire site is one full-screen <Brander /> surface; every screen is generated at runtime.",
+  "description": "Atelier Nova, a womenswear store whose every screen is generated live by BranderUX. The frontend is one component in a thin Next.js shell.",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
     "type-check": "tsc --noEmit",
-    "seed": "tsx scripts/seed-brander-project.mts"
+    "seed": "tsx scripts/seed-brander-project.mts && tsx scripts/seed-hosted-agent.mts",
+    "seed:agent": "tsx scripts/seed-hosted-agent.mts",
+    "check-elements": "node scripts/check-elements.mjs",
+    "type-check:scripts": "tsc --noEmit --strict --skipLibCheck --module nodenext --moduleResolution nodenext --target es2022 --allowImportingTsExtensions --types node scripts/lib/api.mts scripts/seed-hosted-agent.mts scripts/seed-brander-project.mts brander/data/catalog.mts brander/data/world.mts brander/data/persona.mts brander/data/home-screen.mts brander/data/entities.mts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.60.0",
-    "@brander/sdk": "^0.4.1",
-    "@upstash/ratelimit": "^2.0.6",
-    "@upstash/redis": "^1.35.3",
+    "@brander/sdk": "^0.6.1",
     "@vercel/analytics": "^2.0.1",
     "next": "14.2.34",
     "react": "18.3.1",

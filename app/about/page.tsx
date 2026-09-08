@@ -1,33 +1,33 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How Atelier Nova works — a storefront with no pages",
+  title: "How Atelier Nova works, a storefront with no pages",
   description:
-    "Every screen in Atelier Nova is generated at runtime by BranderUX from an AI agent's answers: " +
-    "the personalized home, the catalog, the fitting room, the checkout. Here's the architecture.",
+    "Every screen in Atelier Nova is generated live by the agent BranderUX hosts for the store: " +
+    "the home, the catalog, the fitting room, the order flow. Here is how it is put together.",
   alternates: { canonical: "/about" },
 };
 
 const FAQ = [
   {
     q: "What is Atelier Nova?",
-    a: "A demo fashion storefront with no pages and no frontend code for its screens. The entire site is one BranderUX surface: every screen is generated at runtime from an AI agent's answers.",
+    a: "A demo womenswear store with no pages and no frontend code for its screens. The whole store is one BranderUX surface, and every screen is generated live from the question you just asked.",
   },
   {
     q: "What generates the screens?",
-    a: "BranderUX — AI-UX infrastructure that turns an agent into a full branded application. The agent answers in data; BranderUX composes branded, interactive screens from a catalog of certified and custom elements.",
+    a: "BranderUX. The store was described in the BranderUX builder and published, and the agent BranderUX hosts for it answers here. The answer arrives as data; BranderUX composes it into branded, interactive screens from certified and custom elements.",
   },
   {
     q: "Is the AI writing code on the fly?",
-    a: "No. The screens are composed from pre-built, brand-styled elements (product grid, order panel, fitting room…). The AI decides composition and data; the elements guarantee quality, safety and brand fidelity.",
+    a: "No. Screens compose from pre-built, brand-styled elements: the product grid, the order panel, the fitting room. The agent decides the composition and the data; the elements keep quality, safety and brand fidelity.",
   },
   {
     q: "What happens when I click something?",
-    a: "Every click becomes a new query — clicking a product asks the agent to open its order panel; right-clicking any item lets you ask a question about it. UI and conversation are the same loop.",
+    a: "Every click becomes the next question. Clicking a product asks for its order panel, right-clicking anything lets you ask about it. Real actions are never taken for you: placing the order is a click you make, and it writes a real order with its own number.",
   },
   {
-    q: "Can I build this for my product?",
-    a: "Yes — this repo is a reference integration. The storefront is ~200 lines: a full-screen BranderUX component plus one API route hosting the agent. Everything else is generated.",
+    q: "Can I build this for my business?",
+    a: "Yes, without writing the store. Describe your business in the BranderUX builder, publish, and your full site and MCP app are live. This repo is only the shell: the storefront is one component in a Next.js app, and everything you saw is generated. Businesses that already have an agent of their own connect it instead, with one prop.",
   },
 ];
 
@@ -40,6 +40,24 @@ const FAQ_JSONLD = {
     acceptedAnswer: { "@type": "Answer", text: f.a },
   })),
 };
+
+const FIGURES = [
+  {
+    src: "/about/home.jpg",
+    caption:
+      "The home screen, designed once and replayed on every landing: instant, and the same every time, with no model call.",
+  },
+  {
+    src: "/about/fitting-room.jpg",
+    caption:
+      "The fitting room, a custom element: drag a piece onto the figure and it changes at once, with no model call.",
+  },
+  {
+    src: "/about/trip-capsule.jpg",
+    caption:
+      "“I’m flying to Lisbon for four days” becomes a packing capsule composed around pieces already in the wardrobe.",
+  },
+];
 
 const sectionTitle: React.CSSProperties = {
   fontFamily: "Georgia, 'Times New Roman', serif",
@@ -54,6 +72,8 @@ const body: React.CSSProperties = {
   color: "#4E4136",
   margin: "0 0 14px",
 };
+
+const link: React.CSSProperties = { color: "#B4653F" };
 
 export default function AboutPage() {
   return (
@@ -86,21 +106,23 @@ export default function AboutPage() {
         This store has no pages.
       </h1>
       <p style={{ ...body, fontSize: 18 }}>
-        Every screen you saw — the personalized home, the catalog, the fitting room, the order flow —
-        was <strong>generated at runtime by BranderUX</strong> from an AI agent&apos;s answers. There is no
-        frontend code for any of those screens. The whole storefront is one component.
+        Every screen you saw, the home, the catalog, the fitting room, the order flow, was{" "}
+        <strong>generated live</strong>: built at the moment of your question, in the brand. There is
+        no frontend code for any of them. The whole storefront is one component.
       </p>
 
       <h2 style={sectionTitle}>The architecture</h2>
       <p style={body}>
-        The site is a thin Next.js shell: a full-screen <code>&lt;Brander /&gt;</code> component from{" "}
-        <a href="https://www.npmjs.com/package/@brander/sdk" style={{ color: "#B4653F" }}>
+        Atelier Nova is an agentic application built on BranderUX. Its catalog, its orders, its voice
+        and its rules live in a BranderUX project, and the agent BranderUX hosts for that project
+        answers every question with a branded, interactive screen composed from certified and custom
+        elements. The site around it is a thin Next.js shell whose store surface is one{" "}
+        <code>&lt;Brander /&gt;</code> component from{" "}
+        <a href="https://www.npmjs.com/package/@brander/sdk" style={link}>
           @brander/sdk
-        </a>{" "}
-        plus one API route hosting the agent — a plain Claude call whose system prompt carries the demo
-        world: the shopper, her purchase history, the catalog. BranderUX supplies the other half: a
-        catalog of brand-styled elements and the runtime that composes them into screens as the agent
-        answers. Clicks flow back as new queries, so the UI and the conversation are one loop.
+        </a>
+        . There is no agent here, no model key, no prompt. Clicks are questions, so the interface and
+        the conversation are one loop.
       </p>
       <pre
         style={{
@@ -116,28 +138,29 @@ export default function AboutPage() {
   apiKey={API_KEY}
   projectId={PROJECT_ID}
   variant="chat"
-  onQueryStream={(params) => sseStream("/api/agent/stream", { params })}
+  isFullscreen
 />`}
       </pre>
+      <p style={body}>That is the entire integration.</p>
+
+      <h2 style={sectionTitle}>Generated live, not built once</h2>
+      <p style={body}>
+        App builders generate pages once, the same app for everyone. A BranderUX application is
+        generated live: every screen built at the moment of the question, with the right UX for that
+        user and that action. And it publishes two-sided, a full site for people, an MCP app for AI
+        agents.
+      </p>
+
+      <h2 style={sectionTitle}>By the owner&apos;s rules</h2>
+      <p style={body}>
+        Your website talks with your clients, by your rules. The AI can never act alone: every real
+        action is a click the visitor makes. Placing an order here writes a real order and returns
+        its number, &quot;Track my order&quot; reads it back, and the owner sees every conversation
+        and every order in the BranderUX dashboard.
+      </p>
 
       <h2 style={sectionTitle}>What it looks like</h2>
-      {[
-        {
-          src: "/about/home.jpg",
-          caption:
-            "The home screen: generated on load — campaign hero, six picks, a recommendation that knows what she already owns.",
-        },
-        {
-          src: "/about/fitting-room.jpg",
-          caption:
-            "The fitting room: an interactive custom element — drag a piece onto the figure and it changes instantly, no AI call.",
-        },
-        {
-          src: "/about/trip-capsule.jpg",
-          caption:
-            "“I’m flying to Lisbon for four days” → a packing capsule composed around pieces she already owns.",
-        },
-      ].map((figure) => (
+      {FIGURES.map((figure) => (
         <figure key={figure.src} style={{ margin: "0 0 28px" }}>
           <img
             src={figure.src}
@@ -160,18 +183,18 @@ export default function AboutPage() {
 
       <h2 style={sectionTitle}>Build one yourself</h2>
       <p style={body}>
-        This demo is open source:{" "}
-        <a href="https://github.com/BranderUX/atelier-nova" style={{ color: "#B4653F" }}>
+        This shell is open source:{" "}
+        <a href="https://github.com/BranderUX/atelier-nova" style={link}>
           github.com/BranderUX/atelier-nova
         </a>
-        . BranderUX — the engine generating everything you saw — is at{" "}
+        . BranderUX, the platform Atelier Nova is built and hosted on, is at{" "}
         <a
           href="https://branderux.com?utm_source=atelier-nova&utm_medium=about&utm_campaign=demo"
-          style={{ color: "#B4653F" }}
+          style={link}
         >
           branderux.com
         </a>
-        .
+        . Build agentic applications, in minutes.
       </p>
     </div>
   );

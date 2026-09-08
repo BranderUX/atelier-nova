@@ -1,8 +1,9 @@
 /**
- * The Atelier Nova catalog — the single source of truth for every product the
- * agent may show. Image files live in /public/products; `imagePath` is turned
- * into an absolute URL at prompt-build time (the BranderUX embed renders on a
- * different origin, so relative URLs would break).
+ * The Atelier Nova catalog, the single source of truth for every product the
+ * store sells. Seeded into the BranderUX project's `products` entity by
+ * scripts/seed-hosted-agent.mts; the hosted agent queries it per question.
+ * Image files live in /public/products; `imagePath` becomes an absolute URL
+ * at seed time (screens render on another origin, so relative URLs break).
  */
 
 export enum ProductCategory {
@@ -28,11 +29,31 @@ export interface Product {
   tags: string[];
 }
 
+/** The shape of one `products` record on the platform. */
+export interface ProductRow {
+  id: string;
+  name: string;
+  price: number;
+  /** 0 = not on sale (a real number, so `salePrice gt 0` filters the sale). */
+  salePrice: number;
+  category: ProductCategory;
+  sizes: string[];
+  fabric: string;
+  care: string;
+  fit: string;
+  imageUrl: string;
+  /** Comma-joined slugs, so `tags contains <slug>` filters work. */
+  tags: string;
+  /** 1 when the shopper already owns the piece (the `maya-owns` tag). */
+  ownedByShopper: 0 | 1;
+  _demo: true;
+}
+
 const SIZES = ["S", "M", "L", "XL"];
 const ONE_SIZE = ["One size"];
 
 export const CATALOG: Product[] = [
-  // ——— The Summer Edit (home picks) ———
+  // The Summer Edit (home picks)
   {
     id: "terracotta-jacket",
     name: "Terracotta Jacket",
@@ -41,7 +62,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Linen-viscose blend",
     care: "Machine wash cold on a gentle cycle; line dry. Do not bleach; iron low.",
-    fit: "True to size — tailored shoulder, relaxed body.",
+    fit: "True to size, tailored shoulder, relaxed body.",
     imagePath: "/products/terracotta-jacket.jpg",
     tags: ["summer-edit", "recommended-for-maya", "warm-neutrals", "linen"],
   },
@@ -52,8 +73,8 @@ export const CATALOG: Product[] = [
     category: ProductCategory.DRESSES,
     sizes: SIZES,
     fabric: "100% European linen",
-    care: "Machine wash cold on a gentle cycle; line dry to keep its natural texture. Pre-washed — will not shrink when cared for cold.",
-    fit: "True to size — adjustable wrap waist.",
+    care: "Machine wash cold on a gentle cycle; line dry to keep its natural texture. Pre-washed, will not shrink when cared for cold.",
+    fit: "True to size, adjustable wrap waist.",
     imagePath: "/products/linen-wrap-dress.jpg",
     tags: ["summer-edit", "warm-neutrals", "linen"],
   },
@@ -65,7 +86,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Crisp cotton poplin",
     care: "Machine wash cold; tumble dry low. Iron medium for the crisp look.",
-    fit: "True to size — puff sleeve, elastic back waist.",
+    fit: "True to size, puff sleeve, elastic back waist.",
     imagePath: "/products/sage-poplin-midi.jpg",
     tags: ["summer-edit", "pastel"],
   },
@@ -77,7 +98,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "19-momme mulberry silk",
     care: "Hand wash cold with silk detergent or dry clean; never tumble dry.",
-    fit: "Runs slightly small — consider sizing up for a relaxed drape.",
+    fit: "Runs slightly small, consider sizing up for a relaxed drape.",
     imagePath: "/products/silk-slip-dress.jpg",
     tags: ["summer-edit", "evening"],
   },
@@ -89,7 +110,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Lightweight organic cotton",
     care: "Machine wash cold; line dry. Expect a soft, lived-in finish.",
-    fit: "True to size — smocked bodice fits sizes between.",
+    fit: "True to size, smocked bodice fits sizes between.",
     imagePath: "/products/cotton-sundress.jpg",
     tags: ["summer-edit"],
   },
@@ -101,12 +122,12 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Cotton-merino knit",
     care: "Hand wash cold; dry flat. Fold, never hang.",
-    fit: "Relaxed — Maya owns this in M and wears it oversized.",
+    fit: "Relaxed, Maya owns this in M and wears it oversized.",
     imagePath: "/products/knit-cardigan.jpg",
     tags: ["summer-edit", "warm-neutrals", "maya-owns"],
   },
 
-  // ——— Occasion (soft pastels) ———
+  // Occasion (soft pastels)
   {
     id: "lilac-silk-midi",
     name: "Lilac Silk Midi",
@@ -115,7 +136,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Silk charmeuse",
     care: "Dry clean only.",
-    fit: "True to size — bias cut, scoop neck.",
+    fit: "True to size, bias cut, scoop neck.",
     imagePath: "/products/lilac-silk-midi.jpg",
     tags: ["occasion", "pastel"],
   },
@@ -127,7 +148,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Chiffon over satin lining",
     care: "Dry clean only.",
-    fit: "True to size — V-neck, front slit, floor length.",
+    fit: "True to size, V-neck, front slit, floor length.",
     imagePath: "/products/pale-blue-gown.jpg",
     tags: ["occasion", "pastel"],
   },
@@ -139,7 +160,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Crinkled georgette",
     care: "Dry clean recommended; cool hand wash possible.",
-    fit: "True to size — tie shoulders, wrap bodice.",
+    fit: "True to size, tie shoulders, wrap bodice.",
     imagePath: "/products/blush-maxi-dress.jpg",
     tags: ["occasion", "pastel"],
   },
@@ -151,7 +172,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Airy chiffon, flutter sleeve",
     care: "Dry clean only.",
-    fit: "True to size — floaty A-line, forgiving through the waist.",
+    fit: "True to size, floaty A-line, forgiving through the waist.",
     imagePath: "/products/sage-chiffon-gown.jpg",
     tags: ["occasion", "pastel"],
   },
@@ -163,7 +184,7 @@ export const CATALOG: Product[] = [
     sizes: ["36", "37", "38", "39", "40"],
     fabric: "Vegan leather, 8cm heel",
     care: "Wipe clean with a damp cloth.",
-    fit: "True to size — Maya wears 38.",
+    fit: "True to size, Maya wears 38.",
     imagePath: "/products/strappy-heels.jpg",
     tags: ["occasion", "complete-the-look"],
   },
@@ -180,7 +201,7 @@ export const CATALOG: Product[] = [
     tags: ["occasion", "complete-the-look"],
   },
 
-  // ——— Maya's past orders ———
+  // Maya's past orders
   {
     id: "linen-wide-leg-pants",
     name: "Linen Wide-Leg Pants",
@@ -189,7 +210,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "100% European linen",
     care: "Machine wash cold; line dry.",
-    fit: "True to size — high waist, wide leg.",
+    fit: "True to size, high waist, wide leg.",
     imagePath: "/products/linen-wide-leg-pants.jpg",
     tags: ["maya-owns", "warm-neutrals", "linen"],
   },
@@ -207,7 +228,7 @@ export const CATALOG: Product[] = [
     tags: ["maya-owns", "layering"],
   },
 
-  // ——— New In fillers ———
+  // New In fillers
   {
     id: "cream-linen-blazer",
     name: "Cream Linen Blazer",
@@ -216,7 +237,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Linen-cotton suiting",
     care: "Dry clean recommended.",
-    fit: "Relaxed — drop shoulder, single button.",
+    fit: "Relaxed, drop shoulder, single button.",
     imagePath: "/products/cream-linen-blazer.jpg",
     tags: ["warm-neutrals", "linen", "summer-edit"],
   },
@@ -228,7 +249,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Heavy cotton jersey",
     care: "Machine wash cold; tumble dry low.",
-    fit: "True to size — boxy crop.",
+    fit: "True to size, boxy crop.",
     imagePath: "/products/striped-boat-tee.jpg",
     tags: ["casual"],
   },
@@ -245,7 +266,7 @@ export const CATALOG: Product[] = [
     tags: ["casual", "new-in"],
   },
 
-  // ——— Knitwear fillers ———
+  // Knitwear fillers
   {
     id: "ribbed-turtleneck",
     name: "Ribbed Turtleneck",
@@ -254,7 +275,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Ribbed merino",
     care: "Hand wash cold; dry flat.",
-    fit: "Slim — size up for a looser roll.",
+    fit: "Slim, size up for a looser roll.",
     imagePath: "/products/ribbed-turtleneck.jpg",
     tags: ["warm-neutrals"],
   },
@@ -278,12 +299,12 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Wool-blend bouclé",
     care: "Hand wash cold; dry flat.",
-    fit: "Relaxed — cropped, gold buttons.",
+    fit: "Relaxed, cropped, gold buttons.",
     imagePath: "/products/boucle-cardigan.jpg",
     tags: ["texture"],
   },
 
-  // ——— Sale fillers ———
+  // Sale fillers
   {
     id: "pleated-midi-skirt",
     name: "Pleated Midi Skirt",
@@ -293,7 +314,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Recycled poly satin",
     care: "Machine wash cold in a laundry bag; hang dry.",
-    fit: "True to size — elastic waist.",
+    fit: "True to size, elastic waist.",
     imagePath: "/products/pleated-midi-skirt.jpg",
     tags: ["sale"],
   },
@@ -306,7 +327,7 @@ export const CATALOG: Product[] = [
     sizes: SIZES,
     fabric: "Cotton twill",
     care: "Machine wash cold; hang dry; iron medium.",
-    fit: "True to size — removable belt.",
+    fit: "True to size, removable belt.",
     imagePath: "/products/belted-shirt-dress.jpg",
     tags: ["sale", "workwear"],
   },
@@ -314,4 +335,27 @@ export const CATALOG: Product[] = [
 
 export function getProduct(id: string): Product | undefined {
   return CATALOG.find((p) => p.id === id);
+}
+
+/** One catalog product as the platform record the agent's query tool returns. */
+export function toProductRow(product: Product, siteOrigin: string): ProductRow {
+  return {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    salePrice: product.salePrice ?? 0,
+    category: product.category,
+    sizes: product.sizes,
+    fabric: product.fabric,
+    care: product.care,
+    fit: product.fit,
+    imageUrl: `${siteOrigin}${product.imagePath}`,
+    tags: product.tags.join(","),
+    ownedByShopper: product.tags.includes("maya-owns") ? 1 : 0,
+    _demo: true,
+  };
+}
+
+export function buildProductRows(siteOrigin: string): ProductRow[] {
+  return CATALOG.map((product) => toProductRow(product, siteOrigin));
 }

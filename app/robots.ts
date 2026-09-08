@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nova.branderux.app";
 
 /**
- * Everyone is welcome — including AI crawlers, explicitly. This demo exists to
+ * Everyone is welcome, including AI crawlers, explicitly. This demo exists to
  * be found and quoted by both search engines and LLMs.
  */
 export default function robots(): MetadataRoute.Robots {

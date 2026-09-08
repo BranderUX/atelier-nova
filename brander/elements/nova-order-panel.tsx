@@ -301,7 +301,7 @@ export default function Component({
                 "&:hover": { bgcolor: "#A95A3C", boxShadow: "none" },
               }}
             >
-              {`Order the full look — $${lookTotal}`}
+              {`Order the full look, $${lookTotal}`}
             </Button>
           </Box>
         </Box>
