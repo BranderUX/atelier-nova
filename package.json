@@ -14,7 +14,7 @@
     "type-check:scripts": "tsc --noEmit --strict --skipLibCheck --module nodenext --moduleResolution nodenext --target es2022 --allowImportingTsExtensions --types node scripts/lib/api.mts scripts/seed-hosted-agent.mts scripts/seed-brander-project.mts brander/data/catalog.mts brander/data/world.mts brander/data/persona.mts brander/data/home-screen.mts brander/data/entities.mts"
   },
   "dependencies": {
-    "@brander/sdk": "^0.6.1",
+    "@brander/sdk": "^0.7.0",
     "@vercel/analytics": "^2.0.1",
     "next": "14.2.34",
     "react": "18.3.1",
